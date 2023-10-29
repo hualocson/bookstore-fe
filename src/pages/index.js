@@ -1,10 +1,10 @@
 import Image from "next/image";
 
-import coverBook from "@/resources/images/landing/cover-book.jpg";
-
 import MainLayout from "@/components/layout/main-layout";
 
-import { Button } from "@/components/ui/button";
+import CategorySection from "@/components/landing-page/category-section";
+import Footer from "@/components/landing-page/footer";
+import ProductSection from "@/components/landing-page/product-section";
 
 import bg from "@/resources/images/landing/product-bg.svg";
 
@@ -20,35 +20,11 @@ export default function Home() {
         />
       </div>
 
-      <div className="mx-auto flex h-[calc(100vh-80px)] max-w-screen-xl items-stretch justify-around py-6">
-        <div className="flex items-center justify-center">
-          <Image
-            src={coverBook}
-            alt="Cover Book"
-            width={400}
-            height={"auto"}
-            className="rounded-l-lg rounded-r-xl object-contain shadow-lg"
-          />
-        </div>
-        <div className="flex flex-col items-end justify-around">
-          <h1 className="flex flex-col text-7xl">
-            <span className="font-semibold text-primary">books land</span>
-            <span>— find your next</span>
-            <span>favorite book.</span>
-          </h1>
-          {/* <div className="group relative cursor-pointer rounded-lg p-3 ring ring-primary">
-            <p className="text-3xl font-bold text-primary">Explore</p>
-          </div> */}
+      <ProductSection />
 
-          <Button variant="outline" className="h-18 px-10 text-3xl">
-            Explore
-          </Button>
-        </div>
-      </div>
+      <CategorySection />
 
-      <div className="mx-auto mt-2 h-[calc(100vh-80px)] max-w-screen-xl py-6">
-        <h2 className="text-3xl font-bold">Best Seller</h2>
-      </div>
+      <Footer />
     </MainLayout>
   );
 }
