@@ -1,6 +1,7 @@
-import "@/styles/globals.css";
 import { Roboto } from "next/font/google";
 import Head from "next/head";
+
+import "@/styles/globals.css";
 
 const roboto = Roboto({
   weight: ["400", "500", "700"],
@@ -11,7 +12,7 @@ export default function App({ Component, pageProps }) {
   return (
     <>
       <Head>
-        <title>Bookshelf</title>
+        <title>Books-land</title>
       </Head>
       <main className={roboto.className}>
         <Component {...pageProps} />
