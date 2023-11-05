@@ -1,15 +1,15 @@
 const TopNavigation = [
   {
-    href: "/",
-    label: "shop",
+    href: "/products",
+    label: "home",
+  },
+  {
+    href: "/contact",
+    label: "contact",
   },
   {
     href: "/about",
     label: "about",
-  },
-  {
-    href: "/categories",
-    label: "categories",
   },
 ];
 
