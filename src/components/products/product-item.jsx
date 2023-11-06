@@ -1,37 +1,51 @@
 import { useRouter } from "next/router";
 
+import { addToCart } from "@/apis/cart";
+import useCart from "@/hooks/useCart";
 import { Button, Card, CardBody, Image } from "@nextui-org/react";
 import { Heart, ShoppingCart } from "lucide-react";
 
 import { getCategoryById } from "@/store/features/categories/categories-selector";
 import { useSelector } from "@/store/redux-hook";
 
-const ProductItem = ({ product: { name, image, slug, price, categoryId } }) => {
+const ProductItem = ({
+  product: { id, name, image, slug, price, categoryId },
+}) => {
   const router = useRouter();
   const categories = useSelector(getCategoryById(categoryId));
+  const { mutate } = useCart({ type: "length" });
+
+  const handleAddToCart = async () => {
+    const { error } = await addToCart({ productId: id });
+    if (error) {
+      console.log(error);
+    } else {
+      mutate();
+    }
+  };
 
   return (
-    <div onClick={() => router.push(`/products/${slug}`)}>
+    <div onClick={() => router.push(`/products/${slug}`)} className="h-full">
       <Card
         shadow="lg"
         radius="md"
-        className="border-none bg-light-200 outline-none hover:cursor-pointer"
+        className="h-full border-none bg-light-200 outline-none hover:cursor-pointer"
       >
         <CardBody>
-          <div className="relative grid grid-cols-12 items-center gap-6">
-            <div className="relative col-span-5">
+          <div className="relative grid grow grid-cols-12 items-center gap-6">
+            <div className="col-span-5">
               <Image
                 shadow="sm"
                 radius="md"
                 alt={name}
-                width={"100%"}
-                className="h-[150px] object-cover"
+                width={"auto"}
+                className="h-full object-cover"
                 src={image}
               />
             </div>
             <div className="col-span-7 grid grid-flow-row auto-rows-[minmax(48px,48px)]">
               <b className="row-span-1 line-clamp-2">{name}</b>
-              <p className="self-end text-primary text-sm">{price}</p>
+              <p className="self-end text-sm text-primary">{price}</p>
               <div className="flex items-center gap-2">
                 {categories.map((category) => (
                   <span
@@ -58,6 +72,7 @@ const ProductItem = ({ product: { name, image, slug, price, categoryId } }) => {
                     aria-label="Like"
                     size="sm"
                     variant="light"
+                    onPress={handleAddToCart}
                   >
                     <ShoppingCart size={16} />
                   </Button>

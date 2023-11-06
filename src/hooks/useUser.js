@@ -1,15 +1,15 @@
 import { useEffect } from "react";
 
 import fetcher from "@/apis/configs";
-import endpoints from "@/apis/customer/endpoints";
 import useSWR from "swr";
 
 import { setUser } from "@/store/features/user";
+import { setLoading } from "@/store/features/user/user-slice";
 import { useDispatch } from "@/store/redux-hook";
 
-const useCustomer = () => {
+const useUser = () => {
   const { data, error, isLoading, mutate } = useSWR(
-    endpoints.getCustomer,
+    "/customers",
     fetcher().get
   );
   const dispatch = useDispatch();
@@ -20,6 +20,12 @@ const useCustomer = () => {
     }
   }, [dispatch, data?.customer]);
 
+  useEffect(() => {
+    if (error) {
+      dispatch(setLoading(false));
+    } else dispatch(setLoading(isLoading));
+  }, [dispatch, isLoading, error]);
+
   return {
     data: data?.customer ?? {},
     isLoading,
@@ -28,4 +34,4 @@ const useCustomer = () => {
   };
 };
 
-export default useCustomer;
+export default useUser;

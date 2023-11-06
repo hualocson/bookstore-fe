@@ -1,9 +1,8 @@
 import { axiosInstance } from "@/apis/configs";
-import endpoints from "@/apis/products/endpoints";
 
 const getProducts = async () => {
   try {
-    const products = await axiosInstance.get(endpoints.getProducts);
+    const products = await axiosInstance.get("/products");
     return {
       data: products,
       error: null,

@@ -7,6 +7,7 @@ const initialState = {
   firstName: "",
   lastName: "",
   phoneNumber: "",
+  loading: true,
 };
 
 export const userSlice = createSlice({
@@ -16,16 +17,20 @@ export const userSlice = createSlice({
     setUser: (state, action) => {
       const { email, status, firstName, lastName, phoneNumber } =
         action.payload;
-      state.email = email;
-      state.status = status;
-      state.firstName = firstName;
-      state.lastName = lastName;
-      state.phoneNumber = phoneNumber;
+      state.email = email ? email : state.email;
+      state.status = status ? status : state.status;
+      state.firstName = firstName ? firstName : state.firstName;
+      state.lastName = lastName ? lastName : state.lastName;
+      state.phoneNumber = phoneNumber ? phoneNumber : state.phoneNumber;
+    },
+
+    setLoading: (state, action) => {
+      state.loading = action.payload;
     },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser } = userSlice.actions;
+export const { setUser, setLoading } = userSlice.actions;
 
 export default userSlice.reducer;

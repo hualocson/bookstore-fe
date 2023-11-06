@@ -1,7 +1,7 @@
-import useCustomer from "@/hooks/useCustomer";
+import useUser from "@/hooks/useUser";
 
 const CustomerProvider = ({ children }) => {
-  useCustomer();
+  useUser();
 
   return <>{children}</>;
 };
