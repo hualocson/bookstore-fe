@@ -9,7 +9,7 @@ const ProductsListing = () => {
     <div className="grid grid-cols-9 gap-4">
       {data.map((product) => {
         return (
-          <div className="col-span-3 grid" key={product.id}>
+          <div className="col-span-3" key={product.id}>
             <ProductItem product={product} />
           </div>
         );

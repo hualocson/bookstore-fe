@@ -6,11 +6,12 @@ import { Button } from "@nextui-org/react";
 
 import ProfileInput from "@/components/settings/profile-input";
 
-import { getUser } from "@/store/features/user";
-import { useSelector } from "@/store/redux-hook";
+import { getUser, setUser } from "@/store/features/user";
+import { useDispatch, useSelector } from "@/store/redux-hook";
 
 const EditProfileForm = () => {
   const user = useSelector(getUser);
+  const dispatch = useDispatch();
 
   const [formData, setFormData] = useState({
     phoneNumber: "",
@@ -55,7 +56,7 @@ const EditProfileForm = () => {
         if (error) {
           console.log(error);
         } else {
-          console.log(data);
+          updateReduxUser(data.newDetail);
         }
       } else if (user.status === UserStatus.ACTIVE) {
         const { data, error } = await updateCustomerDetails(formData);
@@ -63,10 +64,14 @@ const EditProfileForm = () => {
         if (error) {
           console.log(error);
         } else {
-          console.log(data);
+          updateReduxUser(data.detail);
         }
       }
     }
+  };
+
+  const updateReduxUser = (data) => {
+    dispatch(setUser(data));
   };
 
   const onClearForm = () => {

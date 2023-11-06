@@ -1,9 +1,8 @@
 import { axiosInstance } from "@/apis/configs";
-import endpoints from "@/apis/customer/endpoints";
 
 const fillCustomerDetails = async ({ firstName, lastName, phoneNumber }) => {
   try {
-    const customer = await axiosInstance.post(endpoints.fillCustomerDetails, {
+    const customer = await axiosInstance.post("/profile", {
       firstName,
       lastName,
       phoneNumber,
@@ -22,14 +21,11 @@ const fillCustomerDetails = async ({ firstName, lastName, phoneNumber }) => {
 
 const updateCustomerDetails = async ({ firstName, lastName, phoneNumber }) => {
   try {
-    const customer = await axiosInstance.patch(
-      endpoints.updateCustomerDetails,
-      {
-        firstName,
-        lastName,
-        phoneNumber,
-      }
-    );
+    const customer = await axiosInstance.patch("/profile", {
+      firstName,
+      lastName,
+      phoneNumber,
+    });
     return {
       data: customer,
       error: null,

@@ -1,4 +1,4 @@
-import { createSelector } from "reselect";
+import { createSelector } from "@reduxjs/toolkit";
 
 /**
  *
@@ -6,7 +6,6 @@ import { createSelector } from "reselect";
  * @returns
  */
 export const getCategories = (state) => state.categories.data;
-
 
 /**
  *

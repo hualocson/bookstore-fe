@@ -4,15 +4,18 @@ import Link from "next/link";
 import TopNavigation from "@/lib/constants/top-nav";
 import {
   Avatar,
+  Badge,
   Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
   Link as NextUILink,
+  Skeleton,
 } from "@nextui-org/react";
 import { LogOut, Search, Settings, ShoppingCart, User2 } from "lucide-react";
 
+import { getCartLength } from "@/store/features/cart/cart-selector";
 import { getUser } from "@/store/features/user";
 import { useSelector } from "@/store/redux-hook";
 
@@ -20,6 +23,7 @@ import logo from "@/resources/images/landing/books-logo.svg";
 
 const TopNav = () => {
   const user = useSelector(getUser);
+  const cartLength = useSelector(getCartLength);
   return (
     <div className="sticky top-0 z-50 bg-light/20 backdrop-blur-lg">
       <div className="mx-auto flex max-w-screen-xl items-center justify-between py-3">
@@ -50,17 +54,30 @@ const TopNav = () => {
 
         <div className="flex items-center gap-x-2">
           <Button
+            radius="full"
             className="text-lg capitalize"
             variant="light"
             isIconOnly
-            startContent={<Search className="h-5 w-5" />}
-          />
-          <Button
-            className="text-lg capitalize"
-            variant="light"
-            isIconOnly
-            startContent={<ShoppingCart className="h-5 w-5" />}
-          />
+          >
+            <Search className="h-5 w-5" />
+          </Button>
+          <Badge
+            color="primary"
+            showOutline={false}
+            isInvisible={cartLength === 0}
+            content={cartLength}
+            shape="circle"
+            size="sm"
+          >
+            <Button
+              radius="full"
+              className="text-lg capitalize"
+              variant="light"
+              isIconOnly
+            >
+              <ShoppingCart className="h-5 w-5" />
+            </Button>
+          </Badge>
           {user.email ? (
             <Dropdown placement="bottom">
               <DropdownTrigger>
@@ -96,6 +113,12 @@ const TopNav = () => {
                 </DropdownItem>
               </DropdownMenu>
             </Dropdown>
+          ) : user.loading ? (
+            <Skeleton
+              className="flex h-8 w-8 rounded-full bg-grayscale before:via-grayscale-600"
+              disableAnimation
+              isLoaded={!user.loading}
+            />
           ) : (
             <div className="relative flex items-center gap-x-2">
               <Button variant="light">Sign Up</Button>
