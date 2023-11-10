@@ -1,8 +1,13 @@
-import SectionLayout from "@/components/landing-page/section-layout";
-import { Button } from "@/components/ui/button";
-import star from "@/resources/images/icons/star.png";
-import themebook from "@/resources/images/landing/themebook.jpg";
 import Image from "next/image";
+
+import themebook from "@/resources/images/landing/themebook.jpg";
+
+import { Button } from "@/components/ui/button";
+
+import SectionLayout from "@/components/landing-page/section-layout";
+
+import star from "@/resources/images/icons/star.png";
+
 const categories = [
   {
     id: 1,
@@ -33,33 +38,33 @@ const products = [
     id: 1,
     name: "The Women Kingdom",
     rating: 4.5,
-    author: "Unknow"
+    author: "Unknow",
   },
   {
     id: 2,
     name: "The Women Kingdom",
     rating: 4.5,
-    author: "Unknow"
+    author: "Unknow",
   },
 
   {
     id: 3,
     name: "The Women Kingdom",
     rating: 4.5,
-    author: "Unknow"
+    author: "Unknow",
   },
 
   {
     id: 4,
     name: "Award Winners",
     rating: 4.5,
-    author: "Unknow"
+    author: "Unknow",
   },
 ];
 
 const CategorySection = () => {
   return (
-    <SectionLayout className="mt-6">
+    <SectionLayout className="mt-6 h-auto mb-32">
       <div className="flex items-end justify-between border-b border-grayscale-300 py-4">
         <h2 className="max-w-sm text-4xl font-bold capitalize">
           {"Let's dive into thoughtful words"}
@@ -79,36 +84,43 @@ const CategorySection = () => {
         </div>
       </div>
       <div className="flex flex-col items-center justify-around">
-        <h2 className="max-w-2xl text-5xl font-bold capitalize mt-8 mx-auto text-primary">
-            {"Special picks for you"}
+        <h2 className="mx-auto my-8 max-w-2xl text-5xl font-bold capitalize text-primary">
+          {"Special picks for you"}
         </h2>
-        <div className="flex gap-4">
-        {products.map((book, index) => (
-          <div key={index} className="bg-primary-100 rounded-lg overflow-hidden shadow-md m-4 w-52 relative">
-                <Image
-                  src={themebook}
-                  alt={book.name}
-                  width = {"auto"}
-                  className="object-contain"
-                />
-                <div className="text-base font-bold text-primary-500 text-center my-2">{book.name}</div>
+        <div className="flex w-full gap-4">
+          {products.map((book, index) => (
+            <div
+              key={index}
+              className="relative overflow-hidden rounded-lg bg-primary-100 shadow-md"
+            >
+              <Image
+                src={themebook}
+                alt={book.name}
+                width={"auto"}
+                className="object-contain"
+              />
+              <div className="my-2 text-center text-base font-bold text-primary-500">
+                {book.name}
+              </div>
               <div className="flex justify-between">
-                <div className="text-light-800 bold ml-4 mb-2">by {book.author}</div>
+                <div className="bold mb-2 ml-4 text-light-800">
+                  by {book.author}
+                </div>
                 <div className="flex">
                   <Image
                     src={star}
                     alt={book.name}
                     width={16}
                     height={16}
-                    className="object-contain mb-2 mr-3" 
+                    className="mb-2 mr-3 object-contain"
                   />
-                  <div className="text-base bold text-primary-600 mr-2">{book.rating}</div>
+                  <div className="bold mr-2 text-base text-primary-600">
+                    {book.rating}
+                  </div>
                 </div>
-                
               </div>
-              
-          </div>
-      ))}
+            </div>
+          ))}
         </div>
       </div>
       {/* Present image have many book */}
