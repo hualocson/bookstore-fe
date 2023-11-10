@@ -4,5 +4,7 @@
     "source.organizeImports": true
   },
   "javascript.updateImportsOnFileMove.enabled": "always",
-  "javascript.preferences.importModuleSpecifier": "non-relative"
+  "javascript.preferences.importModuleSpecifier": "non-relative",
+  "tailwindCSS.classAttributes": ["class", "className", "mainCustomClass"],
+  "cSpell.words": ["lucide", "Pressable"]
 }
