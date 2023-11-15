@@ -46,7 +46,7 @@ const CartPage = () => {
 
   return (
     <div className="mx-auto grid min-h-[calc(100vh-140px)] max-w-screen-xl grid-cols-12 place-items-start py-6">
-      <div className="col-span-8 px-8">
+      <div className="col-span-8 w-full px-8">
         <div className="flex justify-between border-b-2 border-grayscale-400/30 py-4 text-xl">
           <p className="font-bold">Shopping Cart</p>
           <p className="font-bold">{`${data.length} Items`}</p>
