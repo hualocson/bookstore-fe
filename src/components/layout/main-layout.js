@@ -9,10 +9,10 @@ import TopNav from "@/components/layout/top-nav";
  */
 const MainLayout = ({ children, mainCustomClass }) => {
   return (
-    <div>
+    <>
       <TopNav />
       <main className={mainCustomClass}>{children}</main>
-    </div>
+    </>
   );
 };
 
