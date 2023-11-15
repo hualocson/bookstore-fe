@@ -1,175 +1,80 @@
-import { Button } from "@/components/ui/button";
-import coverBook from "@/resources/images/landing/cover-book.jpg";
-import { Input, Select, SelectItem } from "@nextui-org/react";
-import Image from "next/image";
-const shipMethods = [
-    {
-      id: 1,
-      name: "Standard Delivery",
-    },
+import { useRouter } from "next/router";
 
-];
-const CartPageLayout = ({ children }) => {
+import useCart from "@/hooks/useCart";
+import { Button } from "@nextui-org/react";
+
+import CartItem from "@/components/cart/cart-item";
+import OrderSummary from "@/components/cart/order-summary";
+
+const CartPage = () => {
+  const { data, mutate } = useCart({ type: "full" });
+  const router = useRouter();
+  if (data.length === 0) {
+    return (
+      <div className="mx-auto grid h-[calc(100vh-140px)] max-w-lg">
+        <div className="flex w-full flex-col items-center gap-4">
+          <span className="h-72 w-72">
+            <svg
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              className="fill-grayscale-600"
+            >
+              <g id="cart-delete">
+                <path d="M8,17a2,2,0,1,0,2,2A2.002,2.002,0,0,0,8,17Zm0,3a1,1,0,1,1,1-1A1.0013,1.0013,0,0,1,8,20Z" />
+                <path d="M18,17a2,2,0,1,0,2,2A2.002,2.002,0,0,0,18,17Zm0,3a1,1,0,1,1,1-1A1.0013,1.0013,0,0,1,18,20Z" />
+                <path d="M14.353,10.646a.5.5,0,1,1-.707.707L12.5,10.207l-1.147,1.147a.5.5,0,0,1-.707-.707L11.793,9.5,10.6465,8.3535a.5.5,0,0,1,.707-.707L12.5,8.793l1.1465-1.1465a.5.5,0,0,1,.707.707L13.207,9.5Z" />
+                <path d="M21.7505,7.7759l-.5557,5A2.4979,2.4979,0,0,1,18.71,15H8.5A2.503,2.503,0,0,1,6,12.5v-5A1.5017,1.5017,0,0,0,4.5,6h-2a.5.5,0,0,1,0-1h2A2.503,2.503,0,0,1,7,7.5v5A1.5017,1.5017,0,0,0,8.5,14H18.71a1.4986,1.4986,0,0,0,1.4907-1.3345l.5556-5a1.5023,1.5023,0,0,0-.373-1.166A1.482,1.482,0,0,0,19.2656,6H16.5a.5.5,0,0,1,0-1h2.7656a2.5008,2.5008,0,0,1,2.4849,2.7759Z" />
+              </g>
+            </svg>
+          </span>
+          <h2 className="text-xl font-bold">Your cart is current empty!</h2>
+          <p className="text-center">
+            Looks like you hove not added anything to you cart. Go ahead &
+            explore top categories.
+          </p>
+          <Button
+            variant="solid"
+            color="primary"
+            onPress={() => router.push("/products")}
+          >
+            Goto Shop
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="max-w-screen-xl mx-auto h-auto flex m-16">
-        <div className="w-3/4 min-h-screen bg-grayscale-50">
-            <div className="flex justify-between py-8 border-b-2 border-grayscale-400 mx-20">
-                <p className="text-2xl font-bold">Shopping Cart</p>
-                <p className="text-2xl font-bold">3 Items</p>
-            </div>
-            <div className="flex py-8 mx-20">
-                <div className="w-2/5 text-lg text-gray-500 uppercase">Product Details</div>
-                <div className="w-1/5 text-lg text-gray-500 uppercase text-center">Quantity</div>
-                <div className="w-1/5 text-lg text-gray-500 uppercase text-center">Price</div>
-                <div className="w-1/5 text-lg text-gray-500 uppercase text-center">Total</div>
-            </div>
-            <div className="flex py-8 mx-20 items-start">
-                <div className="w-2/5 h-40 flex">
-                    <Image
-                        src={coverBook}
-                        alt="Cover Book"
-                        width={"auto"}
-                        height={160}
-                        className="object-contain"
-                    />
-                    <div className="ml-4 flex flex-col justify-around w-1/2">
-                        <p className="text-base line-clamp-2">Down and Out in Paris and London</p>
-                        <p className="text-primary-600 text-sm line-clamp-1">Classic Books & Novels</p>
-                        <Button variant="outline" className="">
-                            <span className="text-left">Remove</span>
-                        </Button>
-                    </div>
-                </div>
-                <div className="w-1/5 h-40 flex items-center justify-around">
-                    <div className="text-2xl">-</div>
-                    <div className="text-lg border-2 block px-4 py-2 text-center border-grayscale-300">1</div>
-                    <div className="text-2xl">+</div>
-                </div>
-                <div className="w-1/5 h-40  flex items-center justify-center">
-                    <p className="text-center text-grayscale-700 font-bold">$ 400</p>
-                </div>
-                <div className="w-1/5 h-40 flex items-center justify-center">
-                    <p className="text-center text-grayscale-700 font-bold">$ 400</p>
-                </div>
-            </div>
-            <div className="flex py-8 mx-20 items-start">
-                <div className="w-2/5 h-40 flex">
-                    <Image
-                        src={coverBook}
-                        alt="Cover Book"
-                        width={"auto"}
-                        height={160}
-                        className="object-contain"
-                    />
-                    <div className="ml-4 flex flex-col justify-around w-1/2">
-                        <p className="text-base line-clamp-2">Down and Out in Paris and London</p>
-                        <p className="text-primary-600 text-sm line-clamp-1">Classic Books & Novels</p>
-                        <Button variant="outline" className="">
-                            <span className="text-left">Remove</span>
-                        </Button>
-                    </div>
-                </div>
-                <div className="w-1/5 h-40 flex items-center justify-around">
-                    <div className="text-2xl">-</div>
-                    <div className="text-lg border-2 block px-4 py-2 text-center border-grayscale-300">1</div>
-                    <div className="text-2xl">+</div>
-                </div>
-                <div className="w-1/5 h-40  flex items-center justify-center">
-                    <p className="text-center text-grayscale-700 font-bold">$ 400</p>
-                </div>
-                <div className="w-1/5 h-40 flex items-center justify-center">
-                    <p className="text-center text-grayscale-700 font-bold">$ 400</p>
-                </div>
-            </div>
-            <div className="flex py-8 mx-20 items-start">
-                <div className="w-2/5 h-40 flex">
-                    <Image
-                        src={coverBook}
-                        alt="Cover Book"
-                        width={"auto"}
-                        height={160}
-                        className="object-contain"
-                    />
-                    <div className="ml-4 flex flex-col justify-around w-1/2">
-                        <p className="text-base line-clamp-2">Down and Out in Paris and London</p>
-                        <p className="text-primary-600 text-sm line-clamp-1">Classic Books & Novels</p>
-                        <Button variant="outline" className="">
-                            <span className="text-left">Remove</span>
-                        </Button>
-                    </div>
-                </div>
-                <div className="w-1/5 h-40 flex items-center justify-around">
-                    <div className="text-2xl">-</div>
-                    <div className="text-lg border-2 block px-4 py-2 text-center border-grayscale-300">1</div>
-                    <div className="text-2xl">+</div>
-                </div>
-                <div className="w-1/5 h-40  flex items-center justify-center">
-                    <p className="text-center text-grayscale-700 font-bold">$ 400</p>
-                </div>
-                <div className="w-1/5 h-40 flex items-center justify-center">
-                    <p className="text-center text-grayscale-700 font-bold">$ 400</p>
-                </div>
-            </div>
-            <div className="flex py-8 mx-20 items-start">
-                <div className="w-2/5 h-40 flex">
-                    <Image
-                        src={coverBook}
-                        alt="Cover Book"
-                        width={"auto"}
-                        height={160}
-                        className="object-contain"
-                    />
-                    <div className="ml-4 flex flex-col justify-around w-1/2">
-                        <p className="text-base line-clamp-2">Down and Out in Paris and London</p>
-                        <p className="text-primary-600 text-sm line-clamp-1">Classic Books & Novels</p>
-                        <Button variant="outline" className="">
-                            <span className="text-left">Remove</span>
-                        </Button>
-                    </div>
-                </div>
-                <div className="w-1/5 h-40 flex items-center justify-around">
-                    <div className="text-2xl">-</div>
-                    <div className="text-lg border-2 block px-4 py-2 text-center border-grayscale-300">1</div>
-                    <div className="text-2xl">+</div>
-                </div>
-                <div className="w-1/5 h-40  flex items-center justify-center">
-                    <p className="text-center text-grayscale-700 font-bold">$ 400</p>
-                </div>
-                <div className="w-1/5 h-40 flex items-center justify-center">
-                    <p className="text-center text-grayscale-700 font-bold">$ 400</p>
-                </div>
-            </div>
+    <div className="mx-auto grid min-h-[calc(100vh-140px)] max-w-screen-xl grid-cols-12 place-items-start py-6">
+      <div className="col-span-8 px-8">
+        <div className="flex justify-between border-b-2 border-grayscale-400/30 py-4 text-xl">
+          <p className="font-bold">Shopping Cart</p>
+          <p className="font-bold">{`${data.length} Items`}</p>
         </div>
-        <div className="w-1/4 h-screen flex flex-col">
-            <div className="py-8 border-b-2 border-grayscale-400 mx-4">
-                <p className="text-2xl font-bold">Order Sumary</p>
-            </div>
-            <div className="flex justify-between p-4 mt-4">
-                <p className="text-lg font-bold">Items 3</p>
-                <p className="text-lg font-bold">$10000</p>
-            </div>
-            <p className="text-xl font-bold p-4 mt-4 uppercase">Shipping</p>
-            <Select
-                items={shipMethods}
-                className="w-5/6 m-4"
-                >
-                {(method) => <SelectItem key={method.name}>{method.name}</SelectItem>}
-                </Select>
-            <p className="text-xl font-bold p-4 mt-4 uppercase">Promo Code</p>
-            <Input type="text" className=" w-5/6 ml-4"/>
-            <Button className="h-10 w-24 ml-4 mt-8">
-                <span className="text-left">Apply</span>
-            </Button>
-            <div className="flex justify-between p-4 mt-16 mx-4 border-t-2 border-grayscale-400">
-                <p className="text-lg font-bold">Total Cost</p>
-                <p className="text-lg font-bold">$10000</p>
-            </div>
-            <Button className="h-10 mx-4 mt-8">
-                <span className="text-left uppercase">Checkout</span>
-            </Button>
+        <div className="grid grid-cols-12 gap-4 py-4 text-sm">
+          <div className="col-span-5 text-gray-500">Product Details</div>
+          <div className="col-span-3 text-center text-gray-500">Quantity</div>
+          <div className="col-span-2 text-center text-gray-500">Price</div>
+          <div className="col-span-2 text-end text-gray-500">Total</div>
         </div>
+        <div className="flex flex-col gap-y-2">
+          {data.cartItems.map((item) => (
+            <CartItem
+              key={item.productId}
+              productId={item.productId}
+              quantity={item.quantity}
+              name={item.name}
+              image={item.image}
+              price={item.price}
+              checked={item.checked}
+              mutate={mutate}
+            />
+          ))}
+        </div>
+      </div>
+      <OrderSummary />
     </div>
   );
 };
 
-export default CartPageLayout;
+export default CartPage;

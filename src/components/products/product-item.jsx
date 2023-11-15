@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 
 import { addToCart } from "@/apis/cart";
 import useCart from "@/hooks/useCart";
+import { priceFormatter } from "@/lib/utils";
 import { Button, Card, CardBody, Image } from "@nextui-org/react";
 import { Heart, ShoppingCart } from "lucide-react";
 
@@ -45,7 +46,9 @@ const ProductItem = ({
             </div>
             <div className="col-span-7 grid grid-flow-row auto-rows-[minmax(48px,48px)]">
               <b className="row-span-1 line-clamp-2">{name}</b>
-              <p className="self-end text-sm text-primary">{price}</p>
+              <p className="self-end text-sm text-primary">
+                {priceFormatter(price)}
+              </p>
               <div className="flex items-center gap-2">
                 {categories.map((category) => (
                   <span
