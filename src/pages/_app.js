@@ -7,6 +7,7 @@ import { NextUIProvider } from "@nextui-org/react";
 import { Provider } from "react-redux";
 
 import CustomerProvider from "@/components/layout/customer-provider";
+import ToastContainer from "@/components/layout/toast-container";
 
 const montserrat = Montserrat({
   weight: ["400", "500", "700"],
@@ -24,6 +25,7 @@ export default function App({ Component, pageProps }) {
           <main className={montserrat.className}>
             <CustomerProvider>
               <Component {...pageProps} />
+              <ToastContainer />
             </CustomerProvider>
           </main>
         </NextUIProvider>

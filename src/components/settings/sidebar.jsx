@@ -1,11 +1,33 @@
+import Link from "next/link";
+import { useRouter } from "next/router";
+
+import { cn } from "@/lib/utils";
+import { UserCog } from "lucide-react";
+
 const Sidebar = () => {
+  const router = useRouter();
   return (
     <div className="col-span-3 flex flex-col gap-y-3 text-lg">
-      <p className="text-xl font-bold">Manage My account</p>
-      <ul className="ml-4">
-        <li>My Profile</li>
-        <li>Addresses</li>
-      </ul>
+      <div className="flex items-baseline justify-start gap-2">
+        <UserCog size={20} />
+        <p className="text-xl font-bold">Manage My account</p>
+      </div>
+      <div className="ml-6 flex flex-col gap-2">
+        <Link
+          href={"/settings"}
+          className={cn(router.asPath === "/settings" && "text-primary-500")}
+        >
+          My Profile
+        </Link>
+        <Link
+          href={"/settings/addresses"}
+          className={cn(
+            router.asPath === "/settings/addresses" && "text-primary-500"
+          )}
+        >
+          Addresses
+        </Link>
+      </div>
     </div>
   );
 };

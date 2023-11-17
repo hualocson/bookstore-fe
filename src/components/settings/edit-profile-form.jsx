@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 
 import { fillCustomerDetails, updateCustomerDetails } from "@/apis/customer";
 import UserStatus from "@/lib/constants/user-status";
+import { handleErrorResponse } from "@/lib/utils";
 import { Button } from "@nextui-org/react";
+import toast from "react-hot-toast";
 
 import ProfileInput from "@/components/settings/profile-input";
 
@@ -54,7 +56,8 @@ const EditProfileForm = () => {
         const { data, error } = await fillCustomerDetails(formData);
 
         if (error) {
-          console.log(error);
+          const { message } = handleErrorResponse(error);
+          toast.error(message);
         } else {
           updateReduxUser(data.newDetail);
         }
@@ -62,9 +65,11 @@ const EditProfileForm = () => {
         const { data, error } = await updateCustomerDetails(formData);
 
         if (error) {
-          console.log(error);
+          const { message } = handleErrorResponse(error);
+          toast.error(message);
         } else {
           updateReduxUser(data.detail);
+          toast.success("Update profile successfully");
         }
       }
     }
@@ -72,14 +77,6 @@ const EditProfileForm = () => {
 
   const updateReduxUser = (data) => {
     dispatch(setUser(data));
-  };
-
-  const onClearForm = () => {
-    setFormData({
-      phoneNumber: user.phoneNumber ?? "",
-      firstName: user.firstName ?? "",
-      lastName: user.lastName ?? "",
-    });
   };
 
   useEffect(() => {
@@ -125,9 +122,6 @@ const EditProfileForm = () => {
         />
       </div>
       <div className="flex items-center justify-end gap-5">
-        <Button variant="light" color="primary" onClick={onClearForm}>
-          Cancel
-        </Button>
         <Button variant="solid" color="primary" onClick={onSubmitForm}>
           Save Change
         </Button>
