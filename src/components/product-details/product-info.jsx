@@ -1,76 +1,117 @@
 import Image from "next/image";
 
+import { addToCart } from "@/apis/cart";
+import useCategories from "@/hooks/useCategories";
+import { priceFormatter } from "@/lib/utils";
 import coverBook from "@/resources/images/landing/cover-book.jpg";
-
+import { Button } from "@nextui-org/react";
+import { Heart, ShoppingCart, Star } from "lucide-react";
+import { useSWRConfig } from "swr";
 
 import SectionLayout from "@/components/landing-page/section-layout";
-import { Button } from "@/components/ui/button";
-import { Heart, RefreshCcw, Star, Truck } from "lucide-react";
+import RatingSection from "@/components/product-details/rating-section";
 
-const ProductDetailSection = () => {
+import { getAllCategories } from "@/store/features/categories/categories-selector";
+import { useSelector } from "@/store/redux-hook";
+
+const ProductDetailSection = ({
+  id,
+  name,
+  image,
+  price,
+  author,
+  description,
+  pages,
+  publisher,
+  publicationDate,
+  categoryName,
+  statusName,
+}) => {
+  useCategories();
+  const categories = useSelector(getAllCategories);
+
+  const { mutate } = useSWRConfig();
+  const handleAddToCart = async () => {
+    const { error } = await addToCart({ productId: id });
+    if (error) {
+      console.log(error);
+    } else {
+      mutate("/carts/length");
+    }
+  };
   return (
-    <SectionLayout className="flex items-start mt-16">
-      <div className="flex items-center w-1/2 justify-center">
+    <SectionLayout className=" my-10 grid grid-cols-12 place-items-start">
+      <div className="sticky top-[120px] col-span-4 flex flex-col items-center justify-center gap-5">
         <Image
-          src={coverBook}
+          src={image || coverBook}
           alt="Book"
-          width={400}
-          height={"auto"}
+          width={300}
+          height={400}
           className="rounded-l-lg rounded-r-xl object-contain shadow-lg"
         />
+        <div className="flex w-full justify-between">
+          <Button variant="solid" color="primary" className="basis-2/3">
+            Buy Now
+          </Button>
+          <div className="flex items-center justify-around gap-2">
+            <Button
+              isIconOnly
+              color="primary"
+              aria-label="Like"
+              size="sm"
+              variant="light"
+              onPress={handleAddToCart}
+            >
+              <ShoppingCart size={22} />
+            </Button>
+            <Button
+              isIconOnly
+              color="primary"
+              aria-label="Like"
+              size="sm"
+              variant="light"
+            >
+              <Heart size={22} />
+            </Button>
+          </div>
+        </div>
       </div>
-      <div className="flex flex-col items-start w-1/2">
-        <p className="font-bold text-gray-700 text-2xl w-full">Havic HV G-92 Gamepad</p>
-        <div className="flex items-start mt-4 w-full">
-            <div className="flex">
-                <div className="text-lg text-primary-500">4.5</div>
-                <Star className="text-primary-500 ml-2"></Star>
-            </div>
-            <div className="text-lg ml-4">(150 Reviewer)</div>
-            <div className="text-lg ml-4 text-primary-400 ">Instock</div>
+      <div className="col-span-8 flex flex-col items-start gap-3">
+        <p className="w-full text-4xl font-bold text-gray-700">{name}</p>
+        <p className="text-xl font-semibold">{author}</p>
+        <p className="ml-2 underline">{categoryName}</p>
+        <div className="flex items-baseline justify-center gap-x-2">
+          <div className="flex gap-2">
+            <div className="text-lg text-primary-500">4.5</div>
+            <Star className="fill-primary" />
+          </div>
+          <p className="text-lg">(150 Reviewer)</p>
+          <p className="rounded-lg bg-primary-500/10 px-2 py-1 text-sm text-primary-500">
+            {statusName}
+          </p>
         </div>
-        <p className="text-3xl text-grayscale-700 font-bold mt-4">$500</p>
-        <p className="text-basic text-justify mt-2">
-            With more than five million copies sold, Flowers for Algernon is the beloved, classic story of a mentally disabled man whose experimental quest for intelligence mirrors that of Algernon, an extraordinary lab mouse. In poignant diary entries, Charlie tells how a brain operation increases his IQ and changes his life. As the experimental procedure takes effect, Charlie's intelligence expands until it surpasses that of the doctors who engineered his metamorphosis. The experiment seems to be a scientific breakthrough of paramount importance--until Algernon begins his sudden, unexpected deterioration. Will the same happen to Charlie?
+        <p className="mt-4 text-3xl font-bold text-grayscale-700">
+          {priceFormatter(price)}
         </p>
-        <div className="flex flex-row mt-4">
-            <div class="flex flex-row h-10 w-1.4 rounded-lg relative bg-transparent mt-1">
-                <Button variant="secondary" className ="h-full w-20 rounded-l">
-                    <span class="text-3xl font-thin">-</span>
-                </Button>
-                <div className="h-full w-20 bg-grayscale-200 flex items-center justify-center">
-                    <p className="text-lg">1</p>
-                </div>
-                <Button variant="default" className ="h-full w-20 rounded-l">
-                    <span class="text-3xl font-thin">+</span>
-                </Button>
-            </div>
-            <Button
-              className="capitalize h-auto ml-4">
-                <p className="px-8 text-lg py-1">Buy Now</p>
-            </Button>
-            <Button
-              variant = "outline"
-              className="capitalize h-auto ml-4">
-                <Heart/>
-            </Button>
+        <p className="text-basic mt-2 max-w-2xl text-justify">{description}</p>
+
+        <div className="flex max-w-xl flex-col gap-2">
+          <span className="font-semibold">Genres: </span>
+          <div className="flex flex-wrap gap-2">
+            {categories.map((category) => (
+              <Button key={category.id} size="sm" className="truncate">
+                {category.name}
+              </Button>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col w-5/6 mt-4 soutline-2  rounded-md border-2 border-primary-500">
-            <div className="w-full h-20 border-b-2 flex items-center border-primary-500">
-                <Truck className="h-10 w-1/4"/>
-                <div className="flex flex-col w-3/4">
-                    <p className="text-lg font-bold text-primary-500">Free Delivery</p>
-                    <p className= "font-thin text-grayscale-600 underline">enter your postal code for Delivery Availability</p>
-                </div>
-            </div>
-            <div className="w-full h-20 flex items-center ">
-                <RefreshCcw className="h-10 w-1/4"/>
-                <div className="flex flex-col w-3/4">
-                    <p className="text-lg font-bold text-primary-500">Return Delivery</p>
-                    <p className= "font-thin text-grayscale-600 underline">Free 30 Days Delivery Returns</p>
-                </div>
-            </div>
-        </div>
+        {pages && publicationDate && publisher && (
+          <div className="mt-5 text-grayscale-400">
+            <p>{`${pages} pages`}</p>
+            <p>{`First published ${publicationDate} by ${publisher}`}</p>
+          </div>
+        )}
+        <RatingSection />
       </div>
     </SectionLayout>
   );
