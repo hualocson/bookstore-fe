@@ -46,7 +46,7 @@ export const handleErrorResponse = (error) => {
   }
 };
 
-export const priceFormatter = (price) =>
+export const priceFormatter = (price = 0) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
     price / 100
   );

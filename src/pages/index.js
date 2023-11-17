@@ -4,7 +4,6 @@ import MainLayout from "@/components/layout/main-layout";
 
 import CategorySection from "@/components/landing-page/category-section";
 import FeedbackSection from "@/components/landing-page/feedback-section";
-import Footer from "@/components/landing-page/footer";
 import ProductSection from "@/components/landing-page/product-section";
 import ProductSpecialSection from "@/components/landing-page/special-section";
 
@@ -29,8 +28,6 @@ export default function Home() {
       <ProductSpecialSection />
 
       <FeedbackSection />
-
-      <Footer />
     </MainLayout>
   );
 }

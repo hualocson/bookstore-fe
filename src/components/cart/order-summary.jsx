@@ -26,14 +26,12 @@ const OrderSummary = () => {
           placeholder="Shipping"
           aria-label="shipping-select"
           items={shipMethods}
-          size="sm"
+          disallowEmptySelection={true}
+          selectionMode="single"
+          defaultSelectedKeys={[shipMethods[0].name]}
         >
           {(method) => (
-            <SelectItem
-              key={method.name}
-              textValue={method.name}
-              aria-label={method.name}
-            >
+            <SelectItem key={method.name} textValue={method.name}>
               {method.name}
             </SelectItem>
           )}
