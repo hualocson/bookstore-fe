@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import TopNavigation from "@/lib/constants/top-nav";
 import {
@@ -22,6 +23,7 @@ import { useSelector } from "@/store/redux-hook";
 import logo from "@/resources/images/landing/books-logo.svg";
 
 const TopNav = () => {
+  const router = useRouter();
   const user = useSelector(getUser);
   const cartLength = useSelector(getCartLength);
   return (
@@ -41,9 +43,8 @@ const TopNav = () => {
           {TopNavigation.map((item) => (
             <Button
               key={item.href}
-              as={NextUILink}
               className="text-lg capitalize"
-              href={item.href}
+              onPress={() => router.push(item.href)}
               variant="light"
               color="primary"
             >
@@ -74,6 +75,7 @@ const TopNav = () => {
               className="text-lg capitalize"
               variant="light"
               isIconOnly
+              onClick={() => router.push("/cart")}
             >
               <ShoppingCart className="h-5 w-5" />
             </Button>

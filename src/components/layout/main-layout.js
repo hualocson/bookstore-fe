@@ -1,5 +1,7 @@
 import TopNav from "@/components/layout/top-nav";
 
+import Footer from "@/components/landing-page/footer";
+
 /**
  *
  * @param {Object} props
@@ -9,10 +11,11 @@ import TopNav from "@/components/layout/top-nav";
  */
 const MainLayout = ({ children, mainCustomClass }) => {
   return (
-    <div>
+    <>
       <TopNav />
       <main className={mainCustomClass}>{children}</main>
-    </div>
+      <Footer />
+    </>
   );
 };
 

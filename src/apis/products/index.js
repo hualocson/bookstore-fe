@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/apis/configs";
+import { axiosInstance, axiosInstanceSSR } from "@/apis/configs";
 
 const getProducts = async () => {
   try {
@@ -15,4 +15,21 @@ const getProducts = async () => {
   }
 };
 
-export { getProducts };
+const getProductDetails = async (slug, ssr, cookie) => {
+  const instance = ssr ? axiosInstanceSSR : axiosInstance;
+  instance.defaults.headers.Cookie = cookie;
+  try {
+    const response = await instance.get(`/products/${slug}`);
+    return {
+      data: response,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
+export { getProductDetails, getProducts };

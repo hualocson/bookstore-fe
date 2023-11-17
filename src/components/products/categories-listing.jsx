@@ -1,7 +1,7 @@
 import useCategories from "@/hooks/useCategories";
 
 const CategoriesListing = () => {
-  const { data, error } = useCategories();
+  const { data } = useCategories();
 
   return (
     <div className="flex flex-col gap-6">

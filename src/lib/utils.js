@@ -23,7 +23,7 @@ export const handleErrorResponse = (error) => {
     console.error("Get response error: ", error.response);
 
     return {
-      message: data.error.message,
+      message: data.error?.message ?? "Something went wrong",
       statusCode: status || 400,
     };
   } else if (error.request) {
@@ -45,3 +45,8 @@ export const handleErrorResponse = (error) => {
     };
   }
 };
+
+export const priceFormatter = (price = 0) =>
+  new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
+    price / 100
+  );

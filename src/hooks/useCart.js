@@ -4,7 +4,9 @@ import fetcher from "@/apis/configs";
 import useSWR from "swr";
 
 import { setLength } from "@/store/features/cart";
-import { useDispatch } from "@/store/redux-hook";
+import { getCart } from "@/store/features/cart/cart-selector";
+import { setCartItems } from "@/store/features/cart/cart-slice";
+import { useDispatch, useSelector } from "@/store/redux-hook";
 
 /**
  *
@@ -17,16 +19,21 @@ const useCart = ({ type = "length" }) => {
     type === "length" ? "/carts/length" : "/carts",
     fetcher().get
   );
+
+  const cart = useSelector(getCart);
+
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (type === "length") {
       dispatch(setLength(data?.length ?? 0));
+    } else {
+      dispatch(setCartItems({ cartItems: data?.cartItems ?? [] }));
     }
-  }, [dispatch, type, data?.length]);
+  }, [dispatch, type, data?.length, data?.cartItems]);
 
   return {
-    data: data?.length ?? 0,
+    data: type === "length" ? data?.length ?? 0 : cart,
     isLoading,
     error,
     mutate,
