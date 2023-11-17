@@ -1,5 +1,5 @@
 import { BreadcrumbItem, Breadcrumbs } from "@nextui-org/react";
-import { HomeIcon, User2 } from "lucide-react";
+import { HomeIcon, UserCog } from "lucide-react";
 
 import { getUser } from "@/store/features/user";
 import { useSelector } from "@/store/redux-hook";
@@ -12,7 +12,7 @@ const SettingHeader = () => {
         <BreadcrumbItem startContent={<HomeIcon className="h-[1em]" />}>
           Home
         </BreadcrumbItem>
-        <BreadcrumbItem startContent={<User2 className="h-[1em]" />}>
+        <BreadcrumbItem startContent={<UserCog className="h-[1em]" />}>
           My account
         </BreadcrumbItem>
       </Breadcrumbs>

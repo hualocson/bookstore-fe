@@ -1,20 +1,21 @@
 import MainLayout from "@/components/layout/main-layout";
 
-import EditProfileForm from "@/components/settings/edit-profile-form";
+import AddressesListing from "@/components/settings/addresses/addresses-listing";
 import SettingLayout from "@/components/settings/layout";
 import Sidebar from "@/components/settings/sidebar";
 
-const SettingsPage = () => {
+const AddressesPage = () => {
   return (
     <MainLayout>
       <SettingLayout>
-        <div className="relative grid grid-cols-12">
+        <div className="grid grid-cols-12">
           <Sidebar />
-          <EditProfileForm />
+          {/* <EditAddressForm /> */}
+          <AddressesListing />
         </div>
       </SettingLayout>
     </MainLayout>
   );
 };
 
-export default SettingsPage;
+export default AddressesPage;
