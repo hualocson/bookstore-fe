@@ -15,7 +15,7 @@ const AddressCard = ({
   const address = `${streetAddress}, ${city}, ${state}, ${country}`;
 
   return (
-    <div className=" flex min-h-[136px] flex-col rounded-2xl bg-grayscale p-4 text-light">
+    <div className=" flex min-h-[136px] flex-col rounded-2xl p-4">
       <div className="flex w-full items-center justify-between">
         <div className="flex w-full items-center gap-2">
           <b>{name}</b>
@@ -25,7 +25,7 @@ const AddressCard = ({
         <Button
           size="sm"
           variant="light"
-          className="text-light"
+          color="primary"
           startContent={<Pencil size={16} />}
           isIconOnly
           onPress={onEdit}
