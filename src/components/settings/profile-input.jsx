@@ -10,6 +10,7 @@ const ProfileInput = ({
   setValue,
   placeholder,
   isInvalid,
+  onEnter,
 }) => {
   return (
     <Input
@@ -21,6 +22,11 @@ const ProfileInput = ({
       radius="xl"
       value={value}
       isInvalid={isInvalid}
+      onKeyDown={(e) => {
+        if (e.key === "Enter") {
+          onEnter && onEnter();
+        }
+      }}
       onValueChange={setValue}
       labelPlacement="outside"
       color={isInvalid ? "danger" : "default"}
