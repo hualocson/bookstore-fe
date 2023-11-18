@@ -27,6 +27,14 @@ const Sidebar = () => {
         >
           Addresses
         </Link>
+        <Link
+          href={"/settings/order-history"}
+          className={cn(
+            router.asPath === "/settings/order-history" && "text-primary-500"
+          )}
+        >
+          Order History
+        </Link>
       </div>
     </div>
   );
