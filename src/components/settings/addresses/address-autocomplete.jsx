@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import env from "@/lib/constants/vars";
+import { removeAccents } from "@/lib/utils";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { useAsyncList } from "@react-stately/data";
 
@@ -12,7 +13,7 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
       if (selectedAddress !== "") return;
       if (filterText === "") return { items: [] };
       let res = await fetch(
-        `https://api.geoapify.com/v1/geocode/autocomplete?text=${filterText}&type=street&format=json&apiKey=${env.API_KEY}`,
+        `https://api.geoapify.com/v1/geocode/autocomplete?text=${filterText}&limit=10&format=json&apiKey=${env.API_KEY}`,
         { signal }
       );
       let json = await res.json();
@@ -26,6 +27,16 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
       };
     },
   });
+
+  const myFilter = (textValue, inputValue) => {
+    if (inputValue === "") return true;
+    // normalize both strings
+    let text = removeAccents(textValue.toLowerCase());
+    let input = removeAccents(inputValue.toLowerCase());
+
+    return text.includes(input);
+  };
+
   return (
     <div>
       <Autocomplete
@@ -34,6 +45,7 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
         defaultItems={list.items}
         variant="bordered"
         size={"sm"}
+        defaultFilter={myFilter}
         onInputChange={list.setFilterText}
         selectedKey={selectedAddress}
         label="Search address"
