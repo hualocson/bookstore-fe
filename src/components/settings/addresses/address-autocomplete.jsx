@@ -4,6 +4,7 @@ import env from "@/lib/constants/vars";
 import { removeAccents } from "@/lib/utils";
 import { Autocomplete, AutocompleteItem } from "@nextui-org/react";
 import { useAsyncList } from "@react-stately/data";
+import { Search } from "lucide-react";
 
 const AddressAutocomplete = ({ onSelectAddress }) => {
   const [selectedAddress, setSelectedAddress] = useState("");
@@ -48,7 +49,12 @@ const AddressAutocomplete = ({ onSelectAddress }) => {
         defaultFilter={myFilter}
         onInputChange={list.setFilterText}
         selectedKey={selectedAddress}
-        label="Search address"
+        label={
+          <div className="flex items-center justify-center gap-2">
+            <Search size={16} />
+            <span>{"Search address"}</span>
+          </div>
+        }
         menuTrigger="input"
         onSelectionChange={(key) => {
           setSelectedAddress(key);

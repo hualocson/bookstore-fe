@@ -18,7 +18,7 @@ import { useSWRConfig } from "swr";
 import AddressAutocomplete from "@/components/settings/addresses/address-autocomplete";
 import ProfileInput from "@/components/settings/profile-input";
 
-const AddressForm = ({ initData }) => {
+const AddressForm = ({ initData, onFormClose }) => {
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
 
   const { mutate } = useSWRConfig();
@@ -33,7 +33,7 @@ const AddressForm = ({ initData }) => {
     phone: "",
   });
   useEffect(() => {
-    if (initData) {
+    if (initData?.id) {
       setFormData({
         name: initData.name,
         street: initData.streetAddress,
@@ -119,12 +119,13 @@ const AddressForm = ({ initData }) => {
         onPress={onOpen}
         startContent={<Plus size={20} />}
       >
-        Add to address
+        Add new address
       </Button>
       <Modal
         isOpen={isOpen}
         onOpenChange={onOpenChange}
         onClose={() => {
+          onFormClose();
           setFormData({
             name: "",
             street: "",
@@ -146,6 +147,8 @@ const AddressForm = ({ initData }) => {
                 {initData?.id ? "Edit address" : "Shipping Address"}
               </ModalHeader>
               <ModalBody>
+                <AddressAutocomplete onSelectAddress={onSelectAddress} />
+
                 <ProfileInput
                   label={"Name"}
                   value={formData.name}
@@ -153,7 +156,6 @@ const AddressForm = ({ initData }) => {
                   setValue={(value) => onValueChange("name", value)}
                   isClearable={false}
                 />
-                <AddressAutocomplete onSelectAddress={onSelectAddress} />
                 <ProfileInput
                   label={"Street Address"}
                   value={formData.street}
