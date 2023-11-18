@@ -15,6 +15,7 @@ import { Plus } from "lucide-react";
 import toast from "react-hot-toast";
 import { useSWRConfig } from "swr";
 
+import AddressAutocomplete from "@/components/settings/addresses/address-autocomplete";
 import ProfileInput from "@/components/settings/profile-input";
 
 const AddressForm = ({ initData }) => {
@@ -97,6 +98,19 @@ const AddressForm = ({ initData }) => {
     }
   };
 
+  const onSelectAddress = (address) => {
+    if (address) {
+      setFormData((prev) => ({
+        ...prev,
+        street: address?.street ?? prev.street,
+        city: address?.city ?? prev.city,
+        state: address?.state ?? prev.state,
+        postalCode: address?.postcode ?? prev.postalCode,
+        country: address?.country ?? prev.country,
+      }));
+    }
+  };
+
   return (
     <>
       <Button
@@ -139,6 +153,7 @@ const AddressForm = ({ initData }) => {
                   setValue={(value) => onValueChange("name", value)}
                   isClearable={false}
                 />
+                <AddressAutocomplete onSelectAddress={onSelectAddress} />
                 <ProfileInput
                   label={"Street Address"}
                   value={formData.street}
