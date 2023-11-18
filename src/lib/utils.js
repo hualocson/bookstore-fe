@@ -50,3 +50,11 @@ export const priceFormatter = (price = 0) =>
   new Intl.NumberFormat("en-US", { style: "currency", currency: "USD" }).format(
     price / 100
   );
+
+export function removeAccents(str) {
+  return str
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/đ/g, "d")
+    .replace(/Đ/g, "D");
+}
