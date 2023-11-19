@@ -1,4 +1,5 @@
 import { clsx } from "clsx";
+import CryptoJS from "crypto-js";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs) {
@@ -58,3 +59,29 @@ export function removeAccents(str) {
     .replace(/đ/g, "d")
     .replace(/Đ/g, "D");
 }
+
+export function hashText(text) {
+  const hash = CryptoJS.SHA256(text);
+  return hash.toString(CryptoJS.enc.Hex);
+}
+
+export function verifyHashedText(text, hashedText) {
+  return hashText(text) === hashedText;
+}
+
+export const getLastCharacters = (str, limit = 10) => {
+  if (typeof str !== "string") {
+    return str;
+  }
+
+  // Get the length of the string
+  var length = str.length;
+
+  // If the length is less than 10, return the entire string
+  if (length <= limit) {
+    return str;
+  }
+
+  // Otherwise, return the last 10 characters
+  return str.substring(length - limit);
+};

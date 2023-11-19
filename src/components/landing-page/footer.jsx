@@ -21,7 +21,7 @@ const Footer = () => {
                 className="object-contain"
               />
             </span>
-            <p className="text-4xl">book-lands</p>
+            <p className="text-4xl">book-land</p>
           </div>
           <div className="flex items-center justify-around gap-x-4">
             <Button variant="link">{"About"}</Button>
