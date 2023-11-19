@@ -34,7 +34,7 @@ const CheckoutPage = () => {
       const { message } = handleErrorResponse(error);
       throw new Error(message);
     } else {
-      router.push("/products");
+      router.push("/checkout/complete");
       return "Order created successfully";
     }
   };
@@ -61,7 +61,7 @@ const CheckoutPage = () => {
           />
           <span className="text-2xl font-semibold">
             Book
-            <span className="font-bold text-primary">lands</span>
+            <span className="font-bold text-primary">land</span>
           </span>
         </div>
       </Link>

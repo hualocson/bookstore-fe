@@ -29,15 +29,21 @@ const TopNav = () => {
   return (
     <div className="sticky top-0 z-50 bg-light/20 backdrop-blur-lg">
       <div className="mx-auto flex max-w-screen-xl items-center justify-between py-3">
-        <Link className="h-14 w-14" href="/">
-          <Image
-            src={logo}
-            alt="Books Logo"
-            width={100}
-            height={100}
-            className="object-contain"
-            priority
-          />
+        <Link href="/">
+          <div className="flex items-center gap-4">
+            <Image
+              src={logo}
+              alt="Books Logo"
+              width={60}
+              height={60}
+              className="object-contain"
+              priority
+            />
+            <span className="text-2xl font-semibold">
+              Book
+              <span className="font-bold text-primary">land</span>
+            </span>
+          </div>
         </Link>
         <div className="flex items-center justify-around gap-x-4">
           {TopNavigation.map((item) => (

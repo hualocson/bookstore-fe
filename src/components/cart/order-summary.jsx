@@ -52,7 +52,7 @@ const OrderSummary = () => {
         color="primary"
         onPress={() => router.push("/checkout")}
       >
-        <span className="text-left uppercase">Checkout</span>
+       Checkout
       </Button>
     </div>
   );

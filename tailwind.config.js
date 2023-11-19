@@ -94,8 +94,8 @@ module.exports = {
       themes: {
         light: {
           colors: {
-            background: "hsl(var(--background))",
-            foreground: "hsl(var(--foreground))",
+            background: "#f4e9dc",
+            foreground: "#4a4a4a",
             primary: {
               50: "#fdf4f3",
               100: "#fde4e3",
