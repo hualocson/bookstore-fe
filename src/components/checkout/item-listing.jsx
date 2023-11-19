@@ -55,7 +55,7 @@ const ItemListing = ({ shippingFee }) => {
         <div className="flex items-center justify-between">
           <p className="text-lg font-bold">Total Cost</p>
           <p className="text-lg font-bold">
-            {priceFormatter(data.total + parseInt(shippingFee * 100, 10))}
+            {priceFormatter(data.total + parseInt(shippingFee, 10))}
           </p>
         </div>
       </div>
