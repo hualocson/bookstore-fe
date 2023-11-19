@@ -29,7 +29,7 @@ const ShippingMethodSection = ({ selected, setSelected }) => {
           Standard (3-4 business day)
         </Radio>
         <Radio
-          value="20"
+          value="2000"
           classNames={{
             base: cn(
               "m-0 inline-flex max-w-full items-center justify-between bg-transparent p-4",
