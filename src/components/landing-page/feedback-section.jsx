@@ -1,6 +1,5 @@
+import { Button, Input } from "@nextui-org/react";
 import { Facebook, Instagram } from "lucide-react";
-
-import { Button } from "@/components/ui/button";
 
 import SectionLayout from "@/components/landing-page/section-layout";
 
@@ -15,9 +14,9 @@ const FeedbackSection = () => {
           <p className="my-4 text-center text-3xl font-bold">
             Latest new of books
           </p>
-          <div className="mt-4 flex items-center justify-between">
-            <input className="sm:text-md block w-full rounded-lg border border-gray-300 bg-gray-50 p-4 text-gray-900"></input>
-            <Button className="ml-8 " size="lg">
+          <div className="mt-4 flex items-center justify-between gap-4">
+            <Input color="primary" labelPlacement="outside" />
+            <Button size="lg" color="primary">
               Subscribe
             </Button>
           </div>
@@ -37,7 +36,7 @@ const FeedbackSection = () => {
             <div className="flex flex-col items-start">
               <p className="text-lg font-bold text-grayscale-950">Facebook</p>
               <p className="text-base font-bold text-grayscale-600">
-                @bookseft_team
+                @bookland_team
               </p>
             </div>
           </div>
@@ -46,7 +45,7 @@ const FeedbackSection = () => {
             <div className="flex flex-col items-start">
               <p className="text-lg font-bold text-grayscale-950">Instagram</p>
               <p className="text-base font-bold text-grayscale-600">
-                @bookseft_team
+                @bookland_team
               </p>
             </div>
           </div>

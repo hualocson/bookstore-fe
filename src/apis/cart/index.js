@@ -14,11 +14,12 @@ import { axiosInstance } from "@/apis/configs";
  * @param {number} props.quantity
  * @returns {Promise<{data: CartItem?, error: any}>}
  */
-const addToCart = async ({ productId, quantity = 1 }) => {
+const addToCart = async ({ productId, quantity = 1, checked = false }) => {
   try {
     const response = await axiosInstance.post("/carts", {
       productId,
       quantity,
+      checked,
     });
     return {
       data: response.cartItem,
@@ -79,9 +80,27 @@ const toggleCheckedCartItem = async ({ productId }) => {
   }
 };
 
+const toggleAllCheckedCartItem = async ({ checked }) => {
+  try {
+    const response = await axiosInstance.patch("/carts/toggle-all", {
+      checked,
+    });
+    return {
+      data: response.cart,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+
 export {
   addToCart,
   removeCartItem,
+  toggleAllCheckedCartItem,
   toggleCheckedCartItem,
   updateCartItemQuantity,
 };

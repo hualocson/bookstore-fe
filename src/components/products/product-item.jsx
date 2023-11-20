@@ -1,16 +1,17 @@
 import { useRouter } from "next/router";
 
-import { addToCart } from "@/apis/cart";
+import { addToCart, toggleAllCheckedCartItem } from "@/apis/cart";
 import useCart from "@/hooks/useCart";
-import { priceFormatter } from "@/lib/utils";
+import { handleErrorResponse, priceFormatter } from "@/lib/utils";
 import { Button, Card, CardBody, Image } from "@nextui-org/react";
 import { Heart, ShoppingCart } from "lucide-react";
+import toast from "react-hot-toast";
 
 import { getCategoryById } from "@/store/features/categories/categories-selector";
 import { useSelector } from "@/store/redux-hook";
 
 const ProductItem = ({
-  product: { id, name, image, slug, price, categoryId },
+  product: { id, name, author, image, slug, price, categoryId },
 }) => {
   const router = useRouter();
   const categories = useSelector(getCategoryById(categoryId));
@@ -19,9 +20,45 @@ const ProductItem = ({
   const handleAddToCart = async () => {
     const { error } = await addToCart({ productId: id });
     if (error) {
-      console.log(error);
+      const { message, statusCode } = handleErrorResponse(error);
+      if (statusCode === 401) {
+        toast.error("Please login to continue");
+        return;
+      }
+      toast.error(message);
     } else {
       mutate();
+      toast.success("Add to cart successfully");
+    }
+  };
+
+  const notifyBuyNow = () => {
+    toast.promise(handleOnBuyNow(), {
+      loading: "Checking out ...",
+      success: (message) => <b>{message}</b>,
+      error: (error) => <b>{error.message}</b>,
+    });
+  };
+
+  const handleOnBuyNow = async () => {
+    const { error } = await toggleAllCheckedCartItem({ checked: false });
+
+    if (error) {
+      const { message, statusCode } = handleErrorResponse(error);
+      if (statusCode === 401) {
+        throw new Error("Please login to continue");
+      }
+      throw new Error(message);
+    } else {
+      // add to cart
+      const { error } = await addToCart({ productId: id, checked: true });
+      if (error) {
+        const { message } = handleErrorResponse(error);
+        throw new Error(message);
+      }
+
+      router.push("/checkout");
+      return "Checking out successfully";
     }
   };
 
@@ -30,7 +67,7 @@ const ProductItem = ({
       <Card
         shadow="lg"
         radius="md"
-        className="h-full border-none bg-light-200 outline-none hover:cursor-pointer"
+        className="h-full border-none bg-grayscale-800 outline-none hover:cursor-pointer"
       >
         <CardBody>
           <div className="relative grid grow grid-cols-12 items-center gap-6">
@@ -45,26 +82,35 @@ const ProductItem = ({
               />
             </div>
             <div className="col-span-7 grid grid-flow-row auto-rows-[minmax(48px,48px)]">
-              <b className="row-span-1 line-clamp-2">{name}</b>
+              <div>
+                <b className="line-clamp-2 text-light-200">{name}</b>
+                <b className="line-clamp-1 text-sm font-normal text-grayscale-400">
+                  {author}
+                </b>
+              </div>
               <p className="self-end text-sm text-primary">
                 {priceFormatter(price)}
               </p>
               <div className="flex items-center gap-2">
                 {categories.map((category) => (
-                  <span
+                  <Button
                     key={category.id}
-                    className="rounded-md bg-grayscale-600/20 p-1 text-xs text-grayscale-400"
+                    onPress={() =>
+                      router.push(`/products/categories/${category.slug}`)
+                    }
+                    size="sm"
+                    className="rounded-md bg-primary-400/20 text-xs text-primary-400"
+                    color="secondary"
                   >
                     {category.name}
-                  </span>
+                  </Button>
                 ))}
               </div>
               <div className="grid grid-cols-2 items-center justify-items-center gap-2">
                 <Button
                   color="primary"
-                  size="sm"
                   className="justify-self-stretch"
-                  onPress={() => console.log("pres")}
+                  onPress={notifyBuyNow}
                 >
                   Buy now
                 </Button>
@@ -73,20 +119,18 @@ const ProductItem = ({
                     isIconOnly
                     color="primary"
                     aria-label="Like"
-                    size="sm"
                     variant="light"
                     onPress={handleAddToCart}
                   >
-                    <ShoppingCart size={16} />
+                    <ShoppingCart size={20} />
                   </Button>
                   <Button
                     isIconOnly
                     color="primary"
                     aria-label="Like"
-                    size="sm"
                     variant="light"
                   >
-                    <Heart size={16} />
+                    <Heart size={20} />
                   </Button>
                 </div>
               </div>

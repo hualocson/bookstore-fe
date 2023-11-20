@@ -41,42 +41,46 @@ const getOrderStatus = (status) => {
   }
 };
 
-const OrderItemsListing = () => {
+const OrderItemsListing = ({ orderId = "" }) => {
   const { data } = useOrdersHistory();
 
   return (
     <Accordion hideIndicator>
-      {data.orders.map((order) => (
-        <AccordionItem
-          key={order.id}
-          textValue={order.id}
-          title={
-            <div className="flex items-center justify-between rounded-lg bg-grayscale-400/30 p-4">
-              <div className="grid grid-cols-3 gap-8">
-                <div className="flex flex-col gap-2">
-                  <span className="font-bold">Order Id</span>
-                  <span>{getLastCharacters(hashText(String(order.id)))}</span>
+      {data.orders
+        .filter((item) =>
+          orderId !== "" ? hashText(String(item.id)).includes(orderId) : true
+        )
+        .map((order) => (
+          <AccordionItem
+            key={order.id}
+            textValue={order.id}
+            title={
+              <div className="flex items-center justify-between rounded-lg bg-grayscale-400/30 p-4">
+                <div className="grid grid-cols-3 gap-8">
+                  <div className="flex flex-col gap-2">
+                    <span className="font-bold">Order Id</span>
+                    <span>{getLastCharacters(hashText(String(order.id)))}</span>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <span className="font-bold">Date placed</span>
+                    <span>{dayjs(order.createdAt).format("MMM DD, YYYY")}</span>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <span className="font-bold">Total amount</span>
+                    <span>{priceFormatter(order.total)}</span>
+                  </div>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <span className="font-bold">Date placed</span>
-                  <span>{dayjs(order.createdAt).format("MMM DD, YYYY")}</span>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <span className="font-bold">Total amount</span>
-                  <span>{priceFormatter(order.total)}</span>
-                </div>
+                <span>{getOrderStatus(order.status)}</span>
               </div>
-              <span>{getOrderStatus(order.status)}</span>
+            }
+          >
+            <div className="flex flex-col gap-6 p-4">
+              {data.orderItems[order.id].map((item) => (
+                <OrderItem key={item.id} {...item} />
+              ))}
             </div>
-          }
-        >
-          <div className="flex flex-col gap-6 p-4">
-            {data.orderItems[order.id].map((item) => (
-              <OrderItem key={item.id} {...item} />
-            ))}
-          </div>
-        </AccordionItem>
-      ))}
+          </AccordionItem>
+        ))}
     </Accordion>
   );
 };

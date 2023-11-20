@@ -1,11 +1,13 @@
 import Image from "next/image";
+import { useRouter } from "next/router";
 
-import { addToCart } from "@/apis/cart";
+import { addToCart, toggleAllCheckedCartItem } from "@/apis/cart";
 import useCategories from "@/hooks/useCategories";
-import { priceFormatter } from "@/lib/utils";
+import { handleErrorResponse, priceFormatter } from "@/lib/utils";
 import coverBook from "@/resources/images/landing/cover-book.jpg";
 import { Button } from "@nextui-org/react";
 import { Heart, ShoppingCart, Star } from "lucide-react";
+import toast from "react-hot-toast";
 import { useSWRConfig } from "swr";
 
 import SectionLayout from "@/components/landing-page/section-layout";
@@ -26,17 +28,56 @@ const ProductDetailSection = ({
   publicationDate,
   categoryName,
   statusName,
+  categorySlug,
 }) => {
   useCategories();
   const categories = useSelector(getAllCategories);
+  const router = useRouter();
 
   const { mutate } = useSWRConfig();
+
   const handleAddToCart = async () => {
     const { error } = await addToCart({ productId: id });
     if (error) {
-      console.log(error);
+      const { message, statusCode } = handleErrorResponse(error);
+      if (statusCode === 401) {
+        toast.error("Please login to continue");
+        return;
+      }
+      toast.error(message);
     } else {
       mutate("/carts/length");
+      toast.success("Add to cart successfully");
+    }
+  };
+
+  const notifyBuyNow = () => {
+    toast.promise(handleOnBuyNow(), {
+      loading: "Checking out ...",
+      success: (message) => <b>{message}</b>,
+      error: (error) => <b>{error.message}</b>,
+    });
+  };
+
+  const handleOnBuyNow = async () => {
+    const { error } = await toggleAllCheckedCartItem({ checked: false });
+
+    if (error) {
+      const { message, statusCode } = handleErrorResponse(error);
+      if (statusCode === 401) {
+        throw new Error("Please login to continue");
+      }
+      throw new Error(message);
+    } else {
+      // add to cart
+      const { error } = await addToCart({ productId: id, checked: true });
+      if (error) {
+        const { message } = handleErrorResponse(error);
+        throw new Error(message);
+      }
+
+      router.push("/checkout");
+      return "Checking out successfully";
     }
   };
   return (
@@ -50,7 +91,12 @@ const ProductDetailSection = ({
           className="rounded-l-lg rounded-r-xl object-contain shadow-lg"
         />
         <div className="flex w-full justify-between">
-          <Button variant="solid" color="primary" className="basis-2/3">
+          <Button
+            onPress={notifyBuyNow}
+            variant="solid"
+            color="primary"
+            className="basis-2/3"
+          >
             Buy Now
           </Button>
           <div className="flex items-center justify-around gap-2">
@@ -79,14 +125,21 @@ const ProductDetailSection = ({
       <div className="col-span-8 flex flex-col items-start gap-3">
         <p className="w-full text-4xl font-bold text-gray-700">{name}</p>
         <p className="text-xl font-semibold">{author}</p>
-        <p className="ml-2 underline">{categoryName}</p>
+        <Button
+          onPress={() => router.push(`/products/categories/${categorySlug}`)}
+          variant="flat"
+          color="primary"
+          size="sm"
+        >
+          {categoryName}
+        </Button>
         <div className="flex items-baseline justify-center gap-x-2">
           <div className="flex gap-2">
             <div className="text-lg text-primary-500">4.5</div>
             <Star className="fill-primary" />
           </div>
           <p className="text-lg">(150 Reviewer)</p>
-          <p className="rounded-lg bg-primary-500/10 px-2 py-1 text-sm text-primary-500">
+          <p className="rounded-lg bg-success-500/10 px-2 py-1 text-sm text-success-500">
             {statusName}
           </p>
         </div>
@@ -99,7 +152,15 @@ const ProductDetailSection = ({
           <span className="font-semibold">Genres: </span>
           <div className="flex flex-wrap gap-2">
             {categories.map((category) => (
-              <Button key={category.id} size="sm" className="truncate">
+              <Button
+                key={category.id}
+                onPress={() =>
+                  router.push(`/products/categories/${category.slug}`)
+                }
+                size="sm"
+                variant="flat"
+                color="secondary"
+              >
                 {category.name}
               </Button>
             ))}

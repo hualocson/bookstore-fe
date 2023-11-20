@@ -32,4 +32,20 @@ const getProductDetails = async (slug, ssr, cookie) => {
   }
 };
 
-export { getProductDetails, getProducts };
+const getProductsByCategory = async (slug, ssr, cookie) => {
+  const instance = ssr ? axiosInstanceSSR : axiosInstance;
+  instance.defaults.headers.Cookie = cookie;
+  try {
+    const response = await instance.get(`/products/categories/${slug}`);
+    return {
+      data: response,
+      error: null,
+    };
+  } catch (error) {
+    return {
+      data: null,
+      error,
+    };
+  }
+};
+export { getProductsByCategory, getProductDetails, getProducts };
