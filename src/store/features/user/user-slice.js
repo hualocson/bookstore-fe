@@ -14,11 +14,19 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    setUserEmail: (state, action) => {
+      state.email = action.payload;
+    },
+
     setUser: (state, action) => {
       const { email, status, firstName, lastName, phoneNumber } =
         action.payload;
       state.email = email ? email : state.email;
-      state.status = status ? status : state.status;
+      state.status = status
+        ? status
+        : firstName
+        ? UserStatus.ACTIVE
+        : state.status;
       state.firstName = firstName ? firstName : state.firstName;
       state.lastName = lastName ? lastName : state.lastName;
       state.phoneNumber = phoneNumber ? phoneNumber : state.phoneNumber;
@@ -31,6 +39,6 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { setUser, setLoading } = userSlice.actions;
+export const { setUser, setLoading, setUserEmail } = userSlice.actions;
 
 export default userSlice.reducer;

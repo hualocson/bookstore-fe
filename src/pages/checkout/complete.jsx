@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 
-import { hashText } from "@/lib/utils";
+import { getLastCharacters, hashText } from "@/lib/utils";
 import { Button, Input } from "@nextui-org/react";
 import { CheckCircle, Copy } from "lucide-react";
 
@@ -24,12 +24,12 @@ const CheckoutCompletePage = () => {
         </p>
         <Input
           isReadOnly
-          value={hashText("2")}
+          value={getLastCharacters(hashText(router.query.id), 15)}
           className="max-w-lg text-grayscale-400"
           endContent={
             <Button
               onPress={() => {
-                navigator.clipboard.writeText(hashText("2"));
+                navigator.clipboard.writeText(hashText(router.query.id));
               }}
               isIconOnly
               startContent={<Copy size={14} />}
@@ -39,16 +39,26 @@ const CheckoutCompletePage = () => {
             <span className="whitespace-nowrap text-sm">Order ID</span>
           }
         />
-
-        <Button
-          className="mt-4 capitalize"
-          size="lg"
-          variant="solid"
-          color="primary"
-          onPress={() => router.push("/products")}
-        >
-          Continue Shopping
-        </Button>
+        <div className="flex items-center justify-center gap-2">
+          <Button
+            className="mt-4 capitalize"
+            size="lg"
+            variant="bordered"
+            color="primary"
+            onPress={() => router.push("/settings/order-history")}
+          >
+            View order history
+          </Button>
+          <Button
+            className="mt-4 capitalize"
+            size="lg"
+            variant="solid"
+            color="primary"
+            onPress={() => router.push("/products")}
+          >
+            Continue Shopping
+          </Button>
+        </div>
       </SectionLayout>
     </MainLayout>
   );

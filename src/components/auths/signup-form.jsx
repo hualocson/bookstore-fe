@@ -4,19 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { login } from "@/apis/auth";
-import env from "@/lib/constants/vars.js";
+import { signup } from "@/apis/auth";
+import env from "@/lib/constants/vars";
+import { handleErrorResponse } from "@/lib/utils";
 import { Button, Input, Link as UILink } from "@nextui-org/react";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 import AuthLayout from "@/components/auths/layout";
 
 import { setUserEmail } from "@/store/features/user/user-slice";
-import { useDispatch } from "@/store/redux-hook";
 
 import logo from "@/resources/images/landing/books-logo.svg";
 
-const LoginForm = () => {
+const SignUpForm = () => {
   const [loading, setLoading] = useState(false);
 
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const LoginForm = () => {
     if (!email) {
       throw new Error("Please fill your email");
     }
-    const { error } = await login(email);
+    const { error } = await signup(email);
     if (error) {
       const { message } = handleErrorResponse(error);
       throw new Error(message);
@@ -59,7 +60,7 @@ const LoginForm = () => {
               priority
             />
           </Link>
-          <h1 className="text-3xl font-bold">Welcome back!</h1>
+          <h1 className="text-3xl font-bold">Join now!</h1>
         </div>
 
         {/* Form */}
@@ -86,7 +87,7 @@ const LoginForm = () => {
               )
             }
           >
-            Log In with google
+            Sign Up with google
           </Button>
           <span>--- or ---</span>
           <div className="flex w-full flex-col gap-y-4">
@@ -121,21 +122,21 @@ const LoginForm = () => {
               isDisabled={loading}
               onPress={notify}
             >
-              Log In with email
+              Sign Up with email
             </Button>
           </div>
           <div className="w-full text-sm">
-            <span>Need an account? </span>
+            <span>Already have an account? </span>
             <Link
-              href="/auth/signup"
+              href="/auth/login"
               size="sm"
               className="font-bold text-primary"
             >
-              Sign Up
+              Log In
             </Link>
           </div>
           <div className="w-full text-xs">
-            By clicking Log In, you are indicating that you have read and
+            By clicking Sign Up, you are indicating that you have read and
             acknowledge the{" "}
             <span className="text-primary">Terms of Service</span> and{" "}
             <span className="text-primary">Privacy Policy</span>.
@@ -146,4 +147,4 @@ const LoginForm = () => {
   );
 };
 
-export default LoginForm;
+export default SignUpForm;

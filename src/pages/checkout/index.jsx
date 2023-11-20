@@ -7,6 +7,7 @@ import { useRouter } from "next/router";
 import { createOrder } from "@/apis/orders";
 import { handleErrorResponse } from "@/lib/utils";
 import { Button } from "@nextui-org/react";
+import { ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 
 import ItemListing from "@/components/checkout/item-listing";
@@ -26,7 +27,7 @@ const CheckoutPage = () => {
     if (checkoutData.addressId === 0) {
       throw new Error("Please select an address");
     }
-    const { error } = await createOrder({
+    const { error, data } = await createOrder({
       addressId: checkoutData.addressId,
       shippingFee: checkoutData.shippingFee,
     });
@@ -34,7 +35,7 @@ const CheckoutPage = () => {
       const { message } = handleErrorResponse(error);
       throw new Error(message);
     } else {
-      router.push("/checkout/complete");
+      router.push(`/checkout/complete?id=${data.id}`, "/checkout/complete");
       return "Order created successfully";
     }
   };
@@ -60,13 +61,24 @@ const CheckoutPage = () => {
             priority
           />
           <span className="text-2xl font-semibold">
-            Book
+            Books
             <span className="font-bold text-primary">land</span>
           </span>
         </div>
       </Link>
-      <div className="mt-10 grid h-[calc(100vh-180px)] grid-cols-12">
-        <h2 className="col-span-2 text-xl font-semibold">Checkout</h2>
+      <div className="mt-10 grid h-[calc(100vh-180px)] grid-cols-12 place-items-start">
+        <div className="col-span-2 flex items-center gap-6">
+          <Button
+            size="sm"
+            startContent={<ArrowLeft size={16} />}
+            onPress={() => router.back()}
+            variant="flat"
+            color="primary"
+            radius="full"
+            isIconOnly
+          />
+          <h2 className="text-xl font-semibold">Checkout</h2>
+        </div>
         <div className="col-span-10 flex flex-col gap-4">
           <span className="text-lg font-semibold">
             Where would you like your order sent?
