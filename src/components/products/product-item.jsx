@@ -91,7 +91,7 @@ const ProductItem = ({
               <p className="self-end text-sm text-primary">
                 {priceFormatter(price)}
               </p>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center row-span-2 flex-wrap gap-x-2">
                 {categories.map((category) => (
                   <Button
                     key={category.id}

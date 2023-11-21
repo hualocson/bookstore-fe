@@ -9,12 +9,13 @@ import SectionLayout from "@/components/landing-page/section-layout";
 
 const ProductSection = () => {
   return (
-    <SectionLayout className="flex items-center justify-around">
+    <SectionLayout className="relative flex items-center justify-around">
       <div className="flex items-center justify-center">
         <Image
           src={coverBook}
           alt="Cover Book"
           width={400}
+          priority
           height={"auto"}
           className="rounded-l-lg rounded-r-xl object-contain shadow-lg"
         />

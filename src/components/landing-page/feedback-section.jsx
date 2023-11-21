@@ -5,7 +5,7 @@ import SectionLayout from "@/components/landing-page/section-layout";
 
 const FeedbackSection = () => {
   return (
-    <SectionLayout className="mb-20 flex h-auto flex-col items-center justify-start">
+    <SectionLayout className="flex h-auto flex-col items-center justify-start py-20">
       <div className="flex w-full flex-col items-center justify-center rounded-lg bg-grayscale py-10 text-light">
         <div className="w-[780px] grow flex-col">
           <p className="text-center text-5xl font-bold text-primary">

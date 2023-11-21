@@ -1,82 +1,69 @@
+import { useEffect, useState } from "react";
+
 import Image from "next/image";
+import Link from "next/link";
 
-import themebook from "@/resources/images/landing/themebook.jpg";
-
-import { Button } from "@/components/ui/button";
+import { useProducts } from "@/hooks";
+import ProductStatus from "@/lib/constants/product-status";
+import { Button } from "@nextui-org/react";
+import { Star } from "lucide-react";
 
 import SectionLayout from "@/components/landing-page/section-layout";
 
-import star from "@/resources/images/icons/star.png";
-
 const categories = [
   {
-    id: 1,
-    slug: "/fiction",
-    name: "new releases",
+    id: ProductStatus.NEW_ARRIVAL,
+    name: "new arrivals",
   },
   {
-    id: 2,
-    slug: "/non-fiction",
+    id: ProductStatus.BEST_SELLER,
     name: "Best sellers",
   },
 
   {
-    id: 3,
-    slug: "/non-fiction",
-    name: "Featured",
-  },
-
-  {
-    id: 4,
-    slug: "/non-fiction",
-    name: "Award Winners",
-  },
-];
-
-const products = [
-  {
-    id: 1,
-    name: "The Women Kingdom",
-    rating: 4.5,
-    author: "Unknow",
-  },
-  {
-    id: 2,
-    name: "The Women Kingdom",
-    rating: 4.5,
-    author: "Unknow",
-  },
-
-  {
-    id: 3,
-    name: "The Women Kingdom",
-    rating: 4.5,
-    author: "Unknow",
-  },
-
-  {
-    id: 4,
-    name: "Award Winners",
-    rating: 4.5,
-    author: "Unknow",
+    id: ProductStatus.ON_SALE,
+    name: "On Sale",
   },
 ];
 
 const CategorySection = () => {
+  const { data } = useProducts();
+
+  const [filter, setFilter] = useState(ProductStatus.NEW_ARRIVAL);
+
+  const [products, setProducts] = useState(
+    data.filter((p) => p.status === ProductStatus.NEW_ARRIVAL)
+  );
+
+  const handleOnFilter = (filter) => {
+    setFilter(filter);
+    const filteredProducts = data
+      .filter((p) => p.status === filter)
+      .slice(0, 4);
+    setProducts(filteredProducts);
+  };
+  useEffect(() => {
+    setProducts(
+      data.filter((p) => p.status === ProductStatus.NEW_ARRIVAL).slice(0, 4)
+    );
+  }, [data]);
+
   return (
-    <SectionLayout className="mt-6 h-auto mb-32">
+    <SectionLayout className="h-auto py-20">
       <div className="flex items-end justify-between border-b border-grayscale-300 py-4">
         <h2 className="max-w-sm text-4xl font-bold capitalize">
           {"Let's dive into thoughtful words"}
         </h2>
 
         <div className="flex gap-4">
-          {categories.map((c, index) => (
+          {categories.map((c) => (
             <Button
               key={c.id}
-              className="capitalize"
               size="lg"
-              variant={index !== 0 ? "outline" : "default"}
+              className="capitalize"
+              variant={filter !== c.id ? "ghost" : "solid"}
+              color="primary"
+              onPress={() => handleOnFilter(c.id)}
             >
               {c.name}
             </Button>
@@ -87,35 +74,39 @@ const CategorySection = () => {
         <h2 className="mx-auto my-8 max-w-2xl text-5xl font-bold capitalize text-primary">
           {"Special picks for you"}
         </h2>
-        <div className="flex w-full gap-4">
+        <div className="grid w-full grid-cols-4 gap-4">
           {products.map((book, index) => (
             <div
               key={index}
-              className="relative overflow-hidden rounded-lg bg-primary-100 shadow-md"
+              className="flex flex-col justify-between rounded-lg shadow-md"
             >
-              <Image
-                src={themebook}
-                alt={book.name}
-                width={"auto"}
-                className="object-contain"
-              />
-              <div className="my-2 text-center text-base font-bold text-primary-500">
-                {book.name}
+              <div className="flex items-center justify-center">
+                <Image
+                  src={book.image}
+                  alt={book.name}
+                  width={120}
+                  height={200}
+                  priority
+                  className="h-[450px] w-full rounded-lg object-cover"
+                />
               </div>
-              <div className="flex justify-between">
-                <div className="bold mb-2 ml-4 text-light-800">
-                  by {book.author}
-                </div>
-                <div className="flex">
-                  <Image
-                    src={star}
-                    alt={book.name}
-                    width={16}
-                    height={16}
-                    className="mb-2 mr-3 object-contain"
-                  />
-                  <div className="bold mr-2 text-base text-primary-600">
-                    {book.rating}
+
+              <div className="row-span-2 h-full p-4">
+                <Link
+                  href={`/products/${book.slug}`}
+                  className="my-2 line-clamp-2 text-base font-bold text-primary-500"
+                >
+                  {book.name}
+                </Link>
+                <div className="flex justify-between px-2">
+                  <span className="bold line-clamp-1 text-grayscale-400">
+                    by {book.author}
+                  </span>
+                  <div className="flex gap-2">
+                    <Star size={20} className="fill-primary" />
+                    <div className="bold mr-2 text-base text-primary-600">
+                      {4.5}
+                    </div>
                   </div>
                 </div>
               </div>
