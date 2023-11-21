@@ -11,21 +11,25 @@ import bg from "@/resources/images/landing/product-bg.svg";
 
 export default function Home() {
   return (
-    <MainLayout>
-      <div className="absolute inset-0 -z-10 opacity-60 blur-sm">
+    <MainLayout mainCustomClass="relative">
+      <div className="absolute inset-x-0 z-0 h-screen opacity-60 blur-sm">
         <Image
           src={bg}
           alt="Product Background"
-          layout="fill"
+          fill
           className="object-cover"
         />
       </div>
 
-      <ProductSection />
+      <div className="relative z-0">
+        <ProductSection />
+      </div>
 
       <CategorySection />
 
-      <ProductSpecialSection />
+      <div className="bg-grayscale py-20">
+        <ProductSpecialSection />
+      </div>
 
       <FeedbackSection />
     </MainLayout>

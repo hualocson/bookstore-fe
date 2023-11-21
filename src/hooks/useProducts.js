@@ -2,7 +2,6 @@ import fetcher from "@/apis/configs";
 import useSWR from "swr";
 
 const useProducts = (search = "") => {
-  console.log("search", search)
   const { data, error, isLoading, mutate } = useSWR(
     search && search !== "" ? `/products?search=${search}` : "/products",
     fetcher().get

@@ -171,7 +171,12 @@ const TopNav = () => {
             />
           ) : (
             <div className="relative flex items-center gap-x-2">
-              <Button variant="light">Sign Up</Button>
+              <Button
+                variant="light"
+                onPress={() => router.push("/auth/signup")}
+              >
+                Sign Up
+              </Button>
               <Button as={NextUILink} href="/auth/login" color="primary">
                 Sign In
               </Button>

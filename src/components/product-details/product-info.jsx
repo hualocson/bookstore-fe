@@ -13,7 +13,10 @@ import { useSWRConfig } from "swr";
 import SectionLayout from "@/components/landing-page/section-layout";
 import RatingSection from "@/components/product-details/rating-section";
 
-import { getAllCategories } from "@/store/features/categories/categories-selector";
+import {
+  getAllCategories,
+  getCategoryById,
+} from "@/store/features/categories/categories-selector";
 import { useSelector } from "@/store/redux-hook";
 
 const ProductDetailSection = ({
@@ -26,12 +29,13 @@ const ProductDetailSection = ({
   pages,
   publisher,
   publicationDate,
-  categoryName,
   statusName,
-  categorySlug,
+  categoryId,
 }) => {
   useCategories();
   const categories = useSelector(getAllCategories);
+
+  const productCategories = useSelector(getCategoryById(categoryId));
   const router = useRouter();
 
   const { mutate } = useSWRConfig();
@@ -125,14 +129,22 @@ const ProductDetailSection = ({
       <div className="col-span-8 flex flex-col items-start gap-3">
         <p className="w-full text-4xl font-bold text-gray-700">{name}</p>
         <p className="text-xl font-semibold">{author}</p>
-        <Button
-          onPress={() => router.push(`/products/categories/${categorySlug}`)}
-          variant="flat"
-          color="primary"
-          size="sm"
-        >
-          {categoryName}
-        </Button>
+        <div className="flex gap-2">
+          {productCategories.map((category) => (
+            <Button
+              key={category.id}
+              onPress={() =>
+                router.push(`/products/categories/${category.slug}`)
+              }
+              variant="flat"
+              color="primary"
+              size="sm"
+            >
+              {category.name}
+            </Button>
+          ))}
+        </div>
+
         <div className="flex items-baseline justify-center gap-x-2">
           <div className="flex gap-2">
             <div className="text-lg text-primary-500">4.5</div>
