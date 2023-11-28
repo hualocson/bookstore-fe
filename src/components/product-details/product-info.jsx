@@ -3,7 +3,8 @@ import { useRouter } from "next/router";
 
 import { addToCart, toggleAllCheckedCartItem } from "@/apis/cart";
 import useCategories from "@/hooks/useCategories";
-import { handleErrorResponse, priceFormatter } from "@/lib/utils";
+import useFavorites from "@/hooks/useFavorites";
+import { cn, handleErrorResponse, priceFormatter } from "@/lib/utils";
 import coverBook from "@/resources/images/landing/cover-book.jpg";
 import { Button } from "@nextui-org/react";
 import { Heart, ShoppingCart, Star } from "lucide-react";
@@ -18,6 +19,7 @@ import {
   getCategoryById,
 } from "@/store/features/categories/categories-selector";
 import { useSelector } from "@/store/redux-hook";
+import { addToFavorite, removeFromFavorite } from "@/apis/favorites";
 
 const ProductDetailSection = ({
   id,
@@ -38,6 +40,8 @@ const ProductDetailSection = ({
   const productCategories = useSelector(getCategoryById(categoryId));
   const router = useRouter();
 
+  const { data: userFavorites, mutate: favoriteMutate } = useFavorites();
+
   const { mutate } = useSWRConfig();
 
   const handleAddToCart = async () => {
@@ -55,8 +59,8 @@ const ProductDetailSection = ({
     }
   };
 
-  const notifyBuyNow = () => {
-    toast.promise(handleOnBuyNow(), {
+  const notifyBuyNow = (fn) => {
+    toast.promise(fn(), {
       loading: "Checking out ...",
       success: (message) => <b>{message}</b>,
       error: (error) => <b>{error.message}</b>,
@@ -84,6 +88,39 @@ const ProductDetailSection = ({
       return "Checking out successfully";
     }
   };
+
+  const handleOnMarkFavorite = async () => {
+    const { error, statusCode } = await addToFavorite({ productId: id });
+    if (error) {
+      if (statusCode === 401) {
+        throw new Error("Please login to continue");
+      } else {
+        const { message } = handleErrorResponse(error);
+        throw new Error(message);
+      }
+    } else {
+      favoriteMutate();
+      return "Add to favorite successfully";
+    }
+  };
+
+  const handleRemoveFavorite = async () => {
+    const { error, statusCode } = await removeFromFavorite({ productId: id });
+    if (error) {
+      if (statusCode === 401) {
+        throw new Error("Please login to continue");
+      } else {
+        const { message } = handleErrorResponse(error);
+        throw new Error(message);
+      }
+    } else {
+      favoriteMutate();
+      return "Remove favorite successfully";
+    }
+  };
+
+  const isFavorite = userFavorites.find((item) => item.productId === id);
+
   return (
     <SectionLayout className=" my-10 grid grid-cols-12 place-items-start">
       <div className="sticky top-[120px] col-span-4 flex flex-col items-center justify-center gap-5">
@@ -96,7 +133,7 @@ const ProductDetailSection = ({
         />
         <div className="flex w-full justify-between">
           <Button
-            onPress={notifyBuyNow}
+            onPress={() => notifyBuyNow(handleOnBuyNow)}
             variant="solid"
             color="primary"
             className="basis-2/3"
@@ -120,8 +157,15 @@ const ProductDetailSection = ({
               aria-label="Like"
               size="sm"
               variant="light"
+              onPress={() => {
+                if (isFavorite) {
+                  notifyBuyNow(handleRemoveFavorite);
+                } else {
+                  notifyBuyNow(handleOnMarkFavorite);
+                }
+              }}
             >
-              <Heart size={22} />
+              <Heart size={22} className={cn(isFavorite && "fill-primary")} />
             </Button>
           </div>
         </div>
