@@ -2,7 +2,7 @@ import MainLayout from "@/components/layout/main-layout";
 
 import SettingLayout from "@/components/settings/layout";
 import Sidebar from "@/components/settings/sidebar";
-import WhistListLayout from "@/components/settings/whistlist/whistlist";
+import WishListLayout from "@/components/settings/wishlist/wishlist";
 
 const AddressesPage = () => {
   return (
@@ -10,7 +10,7 @@ const AddressesPage = () => {
       <SettingLayout>
         <div className="grid grid-cols-12">
           <Sidebar />
-          <WhistListLayout />
+          <WishListLayout />
         </div>
       </SettingLayout>
     </MainLayout>

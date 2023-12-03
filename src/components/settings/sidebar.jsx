@@ -36,12 +36,12 @@ const Sidebar = () => {
           Order History
         </Link>
         <Link
-          href={"/settings/whistlist"}
+          href={"/settings/wishlist"}
           className={cn(
-            router.asPath === "/settings/whislist" && "text-primary-500"
+            router.asPath === "/settings/wishlist" && "text-primary-500"
           )}
         >
-          My Whistlist
+          My Wishlist
         </Link>
       </div>
     </div>
