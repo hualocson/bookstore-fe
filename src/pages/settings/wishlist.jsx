@@ -8,7 +8,7 @@ const AddressesPage = () => {
   return (
     <MainLayout>
       <SettingLayout>
-        <div className="grid grid-cols-12">
+        <div className="grid grid-cols-12 items-start">
           <Sidebar />
           <WishListLayout />
         </div>

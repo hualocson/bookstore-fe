@@ -67,6 +67,7 @@ const CartPage = () => {
               image={item.image}
               price={item.price}
               checked={item.checked}
+              author={item.author}
               mutate={mutate}
             />
           ))}

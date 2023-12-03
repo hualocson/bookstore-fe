@@ -20,6 +20,7 @@ const CartItem = ({
   price,
   mutate,
   checked,
+  author,
 }) => {
   const [isChecked, setIsChecked] = useState(checked);
   const handleUpdateQuantity = async (quantity) => {
@@ -73,9 +74,7 @@ const CartItem = ({
         </div>
         <div className="col-span-7 flex flex-col items-start justify-around">
           <p className="line-clamp-2 font-bold">{name}</p>
-          <p className="line-clamp-1 text-sm text-primary-600">
-            Classic Books & Novels
-          </p>
+          <p className="line-clamp-1 text-sm text-primary-600">{author}</p>
           <Button
             variant="light"
             color="secondary"

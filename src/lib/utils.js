@@ -1,5 +1,6 @@
 import { clsx } from "clsx";
 import CryptoJS from "crypto-js";
+import toast from "react-hot-toast";
 import { twMerge } from "tailwind-merge";
 
 export function cn(...inputs) {
@@ -84,4 +85,12 @@ export const getLastCharacters = (str, limit = 10) => {
 
   // Otherwise, return the last 10 characters
   return str.substring(length - limit);
+};
+
+export const notifyPromise = (fn, loadingMessage) => {
+  toast.promise(fn(), {
+    loading: loadingMessage ? loadingMessage : "Loading ...",
+    success: (message) => <b>{message}</b>,
+    error: (error) => <b>{error.message}</b>,
+  });
 };

@@ -78,6 +78,7 @@ const ProductItem = ({
       }
     } else {
       mutateGlobal("/favorites");
+      mutateGlobal("/favorites/length");
       return "Add to favorite successfully";
     }
   };
@@ -93,6 +94,7 @@ const ProductItem = ({
       }
     } else {
       mutateGlobal("/favorites");
+      mutateGlobal("/favorites/length");
       return "Remove favorite successfully";
     }
   };

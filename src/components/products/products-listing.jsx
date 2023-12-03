@@ -4,7 +4,9 @@ import EmptyList from "@/components/products/empty-list";
 import ProductItem from "@/components/products/product-item";
 
 const ProductsListing = ({ data }) => {
-  const { data: userFavorites } = useFavorites();
+  const { data: userFavorites } = useFavorites({
+    type: "full",
+  });
 
   if (!data || data.length === 0) return <EmptyList message={"No products"} />;
 

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 import { addToCart, toggleAllCheckedCartItem } from "@/apis/cart";
+import { addToFavorite, removeFromFavorite } from "@/apis/favorites";
 import useCategories from "@/hooks/useCategories";
 import useFavorites from "@/hooks/useFavorites";
 import { cn, handleErrorResponse, priceFormatter } from "@/lib/utils";
@@ -19,7 +20,6 @@ import {
   getCategoryById,
 } from "@/store/features/categories/categories-selector";
 import { useSelector } from "@/store/redux-hook";
-import { addToFavorite, removeFromFavorite } from "@/apis/favorites";
 
 const ProductDetailSection = ({
   id,
@@ -40,7 +40,9 @@ const ProductDetailSection = ({
   const productCategories = useSelector(getCategoryById(categoryId));
   const router = useRouter();
 
-  const { data: userFavorites, mutate: favoriteMutate } = useFavorites();
+  const { data: userFavorites, mutate: favoriteMutate } = useFavorites({
+    type: "full",
+  });
 
   const { mutate } = useSWRConfig();
 
@@ -99,6 +101,7 @@ const ProductDetailSection = ({
         throw new Error(message);
       }
     } else {
+      mutate("/favorites/length");
       favoriteMutate();
       return "Add to favorite successfully";
     }

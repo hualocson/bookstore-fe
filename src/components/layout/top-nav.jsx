@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useRouter } from "next/router";
 
-import TopNavigation from "@/lib/constants/top-nav";
+import useFavorites from "@/hooks/useFavorites";
+import topNavigation from "@/lib/constants/top-nav";
 import UserStatus from "@/lib/constants/user-status";
 import {
   Avatar,
@@ -21,6 +22,7 @@ import {
 } from "@nextui-org/react";
 import {
   Bell,
+  Heart,
   LogOut,
   Search,
   Settings,
@@ -38,6 +40,7 @@ const TopNav = () => {
   const router = useRouter();
   const user = useSelector(getUser);
   const cartLength = useSelector(getCartLength);
+  const { data: favoritesLength } = useFavorites({ type: "length" });
 
   const searchParams = useSearchParams();
 
@@ -69,16 +72,17 @@ const TopNav = () => {
           </div>
         </Link>
         <div className="flex items-center justify-around gap-x-4">
-          {TopNavigation.map((item) => (
-            <Button
-              key={item.href}
-              className="text-lg capitalize"
-              onPress={() => router.push(item.href)}
-              variant="light"
-              color="primary"
-            >
-              {item.label}
-            </Button>
+          {topNavigation.map((item) => (
+            <div key={item.href}>
+              <Button
+                className="text-lg capitalize"
+                onPress={() => router.push(item.href)}
+                variant="light"
+                color="primary"
+              >
+                {item.label}
+              </Button>
+            </div>
           ))}
         </div>
 
@@ -97,6 +101,23 @@ const TopNav = () => {
               <Badge
                 color="primary"
                 showOutline={false}
+                isInvisible={favoritesLength === 0}
+                content={favoritesLength}
+                shape="circle"
+                size="sm"
+              >
+                <Button
+                  radius="full"
+                  className="text-lg capitalize"
+                  variant="light"
+                  isIconOnly
+                  onClick={() => router.push("/settings/wishlist")}
+                  startContent={<Heart className="h-5 w-5" />}
+                />
+              </Badge>
+              <Badge
+                color="primary"
+                showOutline={false}
                 isInvisible={cartLength === 0}
                 content={cartLength}
                 shape="circle"
@@ -108,9 +129,8 @@ const TopNav = () => {
                   variant="light"
                   isIconOnly
                   onClick={() => router.push("/cart")}
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                </Button>
+                  startContent={<ShoppingCart className="h-5 w-5" />}
+                />
               </Badge>
               <Badge
                 color="primary"
@@ -136,8 +156,10 @@ const TopNav = () => {
                       textValue="profile"
                       className="h-14 gap-2"
                     >
-                      <p className="font-semibold">Signed in as</p>
-                      <p className="font-semibold">{user.email}</p>
+                      <div>
+                        <p className="font-semibold">Signed in as</p>
+                        <p className="font-semibold">{user.email}</p>
+                      </div>
                     </DropdownItem>
                     <DropdownItem
                       key="settings"

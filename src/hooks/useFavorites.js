@@ -1,14 +1,21 @@
 import fetcher from "@/apis/configs";
 import useSWR from "swr";
 
-const useFavorites = () => {
+/**
+ *
+ * @param {object} props
+ * @param {"full" | "length"} [props.type="length"]
+ * @returns
+ */
+const useFavorites = ({ type = "full" }) => {
   const { data, error, isLoading, mutate } = useSWR(
-    "/favorites",
+    type === "length" ? "/favorites/length" : "/favorites",
     fetcher().get
   );
 
   return {
-    data: data?.favorites ?? [],
+    data:
+      type === "length" ? data?.favoritesLength ?? 0 : data?.favorites ?? [],
     isLoading,
     error,
     mutate,
