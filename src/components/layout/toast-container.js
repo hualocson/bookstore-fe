@@ -17,14 +17,14 @@ const ToastContainer = () => {
 
         error: {
           style: {
-            background: "#e85e5660",
+            background: "#e85e56",
             color: "#fbf7f1",
           },
         },
 
         success: {
           style: {
-            background: "#009D8060",
+            background: "#009D80",
             color: "#f4e9dc",
           },
         },

@@ -1,21 +1,26 @@
 import { useRouter } from "next/router";
 
 import { addToCart, toggleAllCheckedCartItem } from "@/apis/cart";
+import { addToFavorite, removeFromFavorite } from "@/apis/favorites";
 import useCart from "@/hooks/useCart";
-import { handleErrorResponse, priceFormatter } from "@/lib/utils";
+import { cn, handleErrorResponse, priceFormatter } from "@/lib/utils";
 import { Button, Card, CardBody, Image } from "@nextui-org/react";
 import { Heart, ShoppingCart } from "lucide-react";
 import toast from "react-hot-toast";
+import { useSWRConfig } from "swr";
 
 import { getCategoryById } from "@/store/features/categories/categories-selector";
 import { useSelector } from "@/store/redux-hook";
 
 const ProductItem = ({
   product: { id, name, author, image, slug, price, categoryId },
+  isFavorite = false,
 }) => {
   const router = useRouter();
   const categories = useSelector(getCategoryById(categoryId));
   const { mutate } = useCart({ type: "length" });
+
+  const { mutate: mutateGlobal } = useSWRConfig();
 
   const handleAddToCart = async () => {
     const { error } = await addToCart({ productId: id });
@@ -32,8 +37,8 @@ const ProductItem = ({
     }
   };
 
-  const notifyBuyNow = () => {
-    toast.promise(handleOnBuyNow(), {
+  const notifyBuyNow = (fn) => {
+    toast.promise(fn(), {
       loading: "Checking out ...",
       success: (message) => <b>{message}</b>,
       error: (error) => <b>{error.message}</b>,
@@ -59,6 +64,38 @@ const ProductItem = ({
 
       router.push("/checkout");
       return "Checking out successfully";
+    }
+  };
+
+  const handleOnMarkFavorite = async () => {
+    const { error, statusCode } = await addToFavorite({ productId: id });
+    if (error) {
+      if (statusCode === 401) {
+        throw new Error("Please login to continue");
+      } else {
+        const { message } = handleErrorResponse(error);
+        throw new Error(message);
+      }
+    } else {
+      mutateGlobal("/favorites");
+      mutateGlobal("/favorites/length");
+      return "Add to favorite successfully";
+    }
+  };
+
+  const handleRemoveFavorite = async () => {
+    const { error, statusCode } = await removeFromFavorite({ productId: id });
+    if (error) {
+      if (statusCode === 401) {
+        throw new Error("Please login to continue");
+      } else {
+        const { message } = handleErrorResponse(error);
+        throw new Error(message);
+      }
+    } else {
+      mutateGlobal("/favorites");
+      mutateGlobal("/favorites/length");
+      return "Remove favorite successfully";
     }
   };
 
@@ -91,7 +128,7 @@ const ProductItem = ({
               <p className="self-end text-sm text-primary">
                 {priceFormatter(price)}
               </p>
-              <div className="flex items-center row-span-2 flex-wrap gap-x-2">
+              <div className="row-span-2 flex flex-wrap items-center gap-x-2">
                 {categories.map((category) => (
                   <Button
                     key={category.id}
@@ -106,11 +143,11 @@ const ProductItem = ({
                   </Button>
                 ))}
               </div>
-              <div className="grid grid-cols-2 items-center justify-items-center gap-2">
+              <div className="grid grid-cols-2 items-center justify-items-center gap-4">
                 <Button
                   color="primary"
                   className="justify-self-stretch"
-                  onPress={notifyBuyNow}
+                  onPress={() => notifyBuyNow(handleOnBuyNow)}
                 >
                   Buy now
                 </Button>
@@ -129,8 +166,18 @@ const ProductItem = ({
                     color="primary"
                     aria-label="Like"
                     variant="light"
+                    onPress={() => {
+                      if (isFavorite) {
+                        notifyBuyNow(handleRemoveFavorite);
+                      } else {
+                        notifyBuyNow(handleOnMarkFavorite);
+                      }
+                    }}
                   >
-                    <Heart size={20} />
+                    <Heart
+                      size={20}
+                      className={cn(isFavorite && "fill-primary")}
+                    />
                   </Button>
                 </div>
               </div>

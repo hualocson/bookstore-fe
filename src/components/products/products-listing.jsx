@@ -1,7 +1,13 @@
+import useFavorites from "@/hooks/useFavorites";
+
 import EmptyList from "@/components/products/empty-list";
 import ProductItem from "@/components/products/product-item";
 
 const ProductsListing = ({ data }) => {
+  const { data: userFavorites } = useFavorites({
+    type: "full",
+  });
+
   if (!data || data.length === 0) return <EmptyList message={"No products"} />;
 
   return (
@@ -9,7 +15,12 @@ const ProductsListing = ({ data }) => {
       {data.map((product) => {
         return (
           <div className="col-span-3" key={product.id}>
-            <ProductItem product={product} />
+            <ProductItem
+              product={product}
+              isFavorite={userFavorites.find(
+                (item) => item.productId === product.id
+              )}
+            />
           </div>
         );
       })}

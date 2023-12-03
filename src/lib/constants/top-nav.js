@@ -1,4 +1,4 @@
-const TopNavigation = [
+const topNavigation = [
   {
     href: "/products",
     label: "home",
@@ -13,4 +13,4 @@ const TopNavigation = [
   },
 ];
 
-export default TopNavigation;
+export default topNavigation;
