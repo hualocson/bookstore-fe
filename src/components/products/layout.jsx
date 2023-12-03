@@ -9,7 +9,7 @@ const ProductsPageLayout = ({ children }) => {
         <aside className="sticky top-[104px] col-span-2 col-start-2 min-h-[calc(100vh-325px)]">
           <CategoriesListing />
         </aside>
-        <div className="col-span-8 col-start-4 py-6">{children}</div>
+        <div className="col-span-8 col-start-4 pb-6">{children}</div>
       </div>
     </MainLayout>
   );
