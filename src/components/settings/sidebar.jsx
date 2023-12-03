@@ -35,6 +35,14 @@ const Sidebar = () => {
         >
           Order History
         </Link>
+        <Link
+          href={"/settings/wishlist"}
+          className={cn(
+            router.asPath === "/settings/wishlist" && "text-primary-500"
+          )}
+        >
+          My Wishlist
+        </Link>
       </div>
     </div>
   );
