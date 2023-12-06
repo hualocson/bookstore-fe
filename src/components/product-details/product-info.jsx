@@ -14,6 +14,7 @@ import { useSWRConfig } from "swr";
 
 import SectionLayout from "@/components/landing-page/section-layout";
 import RatingSection from "@/components/product-details/rating-section";
+import RelateProductsListing from "@/components/product-details/relate-products-listing";
 
 import {
   getAllCategories,
@@ -33,6 +34,7 @@ const ProductDetailSection = ({
   publicationDate,
   statusName,
   categoryId,
+  relateProducts,
 }) => {
   useCategories();
   const categories = useSelector(getAllCategories);
@@ -230,6 +232,9 @@ const ProductDetailSection = ({
             <p>{`${pages} pages`}</p>
             <p>{`First published ${publicationDate} by ${publisher}`}</p>
           </div>
+        )}
+        {relateProducts && relateProducts.length > 0 && (
+          <RelateProductsListing products={relateProducts} />
         )}
         <RatingSection />
       </div>

@@ -6,7 +6,7 @@ import Link from "next/link";
 import { useProducts } from "@/hooks";
 import ProductStatus from "@/lib/constants/product-status";
 import { Button } from "@nextui-org/react";
-import { Star } from "lucide-react";
+import { Heart } from "lucide-react";
 
 import SectionLayout from "@/components/landing-page/section-layout";
 
@@ -92,22 +92,21 @@ const CategorySection = () => {
               </div>
 
               <div className="row-span-2 h-full p-4">
-                <Link
-                  href={`/products/${book.slug}`}
-                  className="my-2 line-clamp-2 text-base font-bold text-primary-500"
-                >
-                  {book.name}
-                </Link>
+                <div className="flex items-start justify-between">
+                  <Link
+                    href={`/products/${book.slug}`}
+                    className="my-2 line-clamp-2 text-base font-bold text-primary-500"
+                  >
+                    {book.name}
+                  </Link>
+                  <div className="flex gap-2">
+                    <Heart size={20} className="fill-primary" />
+                  </div>
+                </div>
                 <div className="flex justify-between px-2">
                   <span className="bold line-clamp-1 text-grayscale-400">
                     by {book.author}
                   </span>
-                  <div className="flex gap-2">
-                    <Star size={20} className="fill-primary" />
-                    <div className="bold mr-2 text-base text-primary-600">
-                      {4.5}
-                    </div>
-                  </div>
                 </div>
               </div>
             </div>
