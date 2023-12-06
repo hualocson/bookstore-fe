@@ -9,8 +9,17 @@ import {
 } from "@/apis/cart";
 import { cn, priceFormatter } from "@/lib/utils";
 import coverBook from "@/resources/images/landing/cover-book.jpg";
-import { Button, Checkbox } from "@nextui-org/react";
-import { Minus, Plus } from "lucide-react";
+import {
+  Button,
+  Checkbox,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  useDisclosure,
+} from "@nextui-org/react";
+import { Minus, Plus, Trash2 } from "lucide-react";
 
 const CartItem = ({
   productId,
@@ -22,6 +31,7 @@ const CartItem = ({
   checked,
   author,
 }) => {
+  const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [isChecked, setIsChecked] = useState(checked);
   const handleUpdateQuantity = async (quantity) => {
     if (quantity > 0) {
@@ -75,14 +85,44 @@ const CartItem = ({
         <div className="col-span-7 flex flex-col items-start justify-around">
           <p className="line-clamp-2 font-bold">{name}</p>
           <p className="line-clamp-1 text-sm text-primary-600">{author}</p>
-          <Button
-            variant="light"
-            color="secondary"
-            size="sm"
-            onPress={() => handleUpdateQuantity(0)}
-          >
-            Remove
-          </Button>
+          <>
+            <Button
+              variant="light"
+              color="secondary"
+              size="sm"
+              onPress={onOpen}
+              startContent={<Trash2 size={20} />}
+              isIconOnly
+            />
+            <Modal isOpen={isOpen} onOpenChange={onOpenChange}>
+              <ModalContent>
+                {(onClose) => (
+                  <>
+                    <ModalHeader className="flex flex-col gap-1">
+                      Are you sure?
+                    </ModalHeader>
+                    <ModalBody>
+                      <p>This action will remove this item from your cart.</p>
+                    </ModalBody>
+                    <ModalFooter>
+                      <Button color="danger" variant="light" onPress={onClose}>
+                        No
+                      </Button>
+                      <Button
+                        color="primary"
+                        onPress={() => {
+                          onClose();
+                          handleUpdateQuantity(0);
+                        }}
+                      >
+                        Yes
+                      </Button>
+                    </ModalFooter>
+                  </>
+                )}
+              </ModalContent>
+            </Modal>
+          </>
         </div>
       </div>
       <div className="col-span-3 flex justify-center gap-3">

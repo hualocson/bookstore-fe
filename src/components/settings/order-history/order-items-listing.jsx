@@ -1,4 +1,3 @@
-import { useOrdersHistory } from "@/hooks";
 import OrderStatus from "@/lib/constants/order-status";
 import { getLastCharacters, hashText, priceFormatter } from "@/lib/utils";
 import { Accordion, AccordionItem } from "@nextui-org/react";
@@ -17,7 +16,7 @@ const getOrderStatus = (status) => {
     case OrderStatus.PROCESSED:
       return (
         <span className="rounded-lg bg-blue-400/30 p-2 text-sm text-blue-500">
-          Processed
+          Delivering
         </span>
       );
     case OrderStatus.DELIVERED:
@@ -41,9 +40,7 @@ const getOrderStatus = (status) => {
   }
 };
 
-const OrderItemsListing = ({ orderId = "" }) => {
-  const { data } = useOrdersHistory();
-
+const OrderItemsListing = ({ data, orderId = "" }) => {
   return (
     <Accordion hideIndicator>
       {data.orders

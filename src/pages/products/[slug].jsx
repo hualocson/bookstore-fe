@@ -5,11 +5,10 @@ import MainLayout from "@/components/layout/main-layout";
 
 import ProductDetailSection from "@/components/product-details/product-info";
 
-const ProductDetailPage = ({ product }) => {
-  console.log(product);
+const ProductDetailPage = ({ product, relateProducts }) => {
   return (
     <MainLayout>
-      <ProductDetailSection {...product} />
+      <ProductDetailSection {...product} relateProducts={relateProducts} />
     </MainLayout>
   );
 };
@@ -29,6 +28,7 @@ export const getServerSideProps = async (context) => {
             "MMMM DD, YYYY"
           ),
         },
+        relateProducts: data.relateProducts,
       },
     };
   } catch (error) {}
