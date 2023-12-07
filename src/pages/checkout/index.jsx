@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { createOrder } from "@/apis/orders";
+import {
+  createOrder,
+  createPayPalCapture,
+  createPayPalOrder,
+} from "@/apis/orders";
 import { handleErrorResponse } from "@/lib/utils";
 import { Button } from "@nextui-org/react";
 import { ArrowLeft } from "lucide-react";
 import toast from "react-hot-toast";
 
 import ItemListing from "@/components/checkout/item-listing";
+import PayPalCheckout from "@/components/checkout/paypal-checkout";
 import ShippingMethodSection from "@/components/checkout/shipping-method";
 import AddressesListing from "@/components/settings/addresses/addresses-listing";
 
@@ -39,6 +44,84 @@ const CheckoutPage = () => {
       return "Order created successfully";
     }
   };
+
+  const addressRef = useRef({
+    addressId: 0,
+    shippingFee: "0",
+  });
+  useEffect(() => {
+    addressRef.current = {
+      addressId: checkoutData.addressId,
+      shippingFee: checkoutData.shippingFee,
+    };
+  }, [checkoutData.addressId, checkoutData.shippingFee]);
+
+  const handleCreatePalPalOrder = async () => {
+    if (addressRef.current.addressId === 0) {
+      toast.error("Please select an address");
+    } else {
+      try {
+        const response = await createPayPalOrder({
+          shippingFee: addressRef.current.shippingFee,
+        });
+
+        if (response.data.id) {
+          return response.data.id;
+        } else {
+          const errorDetail = response.data?.details?.[0];
+          const errorMessage = errorDetail
+            ? `${errorDetail.issue} ${errorDetail.description} (${response.data.debug_id})`
+            : JSON.stringify(response.data);
+
+          throw new Error(errorMessage);
+        }
+      } catch (error) {
+        toast.error("Could not initiate PayPal Checkout...");
+      }
+    }
+  };
+
+  const handleCaptureOrder = async (data, actions) => {
+    try {
+      const response = await createPayPalCapture({
+        orderId: data.orderID,
+      });
+
+      const orderData = response.data;
+      // Three cases to handle:
+      //   (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+      //   (2) Other non-recoverable errors -> Show a failure message
+      //   (3) Successful transaction -> Show confirmation or thank you message
+
+      const errorDetail = orderData?.details?.[0];
+
+      if (errorDetail?.issue === "INSTRUMENT_DECLINED") {
+        // (1) Recoverable INSTRUMENT_DECLINED -> call actions.restart()
+        // recoverable state, per https://developer.paypal.com/docs/checkout/standard/customize/handle-funding-failures/
+        return actions.restart();
+      } else if (errorDetail) {
+        // (2) Other non-recoverable errors -> Show a failure message
+        throw new Error(`${errorDetail.description} (${orderData.debug_id})`);
+      } else {
+        // (3) Successful transaction -> Show confirmation or thank you message
+        // Or go to another URL:  actions.redirect('thank_you.html');
+        const { error, data } = await createOrder({
+          addressId: addressRef.current.addressId,
+          shippingFee: addressRef.current.shippingFee,
+        });
+        if (error) {
+          const { message } = handleErrorResponse(error);
+          throw new Error(message);
+        } else {
+          router.push(`/checkout/complete?id=${data.id}`, "/checkout/complete");
+          toast.success("Order created successfully");
+        }
+      }
+    } catch (error) {
+      toast.error("Sorry, your transaction could not be processed...");
+    }
+  };
+
   const notifyCheckout = () => {
     toast.promise(handleOnCheckout(), {
       loading: "Checking out ...",
@@ -85,12 +168,12 @@ const CheckoutPage = () => {
           </span>
           <div className="max-w-screen-lg">
             <AddressesListing
-              onSelectAddress={(addressId) =>
+              onSelectAddress={(addressId) => {
                 setCheckoutData((prev) => ({
                   ...prev,
                   addressId: addressId,
-                }))
-              }
+                }));
+              }}
             />
           </div>
           <ShippingMethodSection
@@ -100,7 +183,7 @@ const CheckoutPage = () => {
             }
           />
 
-          <div>
+          <div className="flex gap-x-4">
             <Button
               className="uppercase"
               variant="shadow"
@@ -109,6 +192,10 @@ const CheckoutPage = () => {
             >
               Complete purchase
             </Button>
+            <PayPalCheckout
+              onCreateOrder={handleCreatePalPalOrder}
+              onCaptureOrder={handleCaptureOrder}
+            />
           </div>
         </div>
       </div>
