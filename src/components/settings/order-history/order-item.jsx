@@ -23,12 +23,12 @@ const getItemDate = (deliveryAt, canceledAt, completedAt) => {
     );
   } else if (completedAt) {
     return (
-      <span>{`Completed on ${dayjs(completedAt).format(
+      <span>{`Start deliver at on ${dayjs(completedAt).format(
         "MMMM DD, YYYY"
       )}`}</span>
     );
   }
-  return <span className="text-sm text-grayscale-400">{"Processing"}</span>;
+  return <span className="text-sm text-grayscale-400">{"Waiting prepare orders"}</span>;
 };
 
 const OrderItem = ({

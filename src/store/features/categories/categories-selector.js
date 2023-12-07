@@ -12,18 +12,19 @@ export const getCategories = (state) => state.categories.data;
  * @param {import("@/types/redux.d.ts").RootState} state
  * @returns
  */
-export const getAllCategories = (state) =>{
-  const data = state.categories.data;
+const selectCategoriesData = (state) => state.categories.data;
+export const getAllCategories = createSelector(
+  [selectCategoriesData],
+  (data) => {
+    const allCategories = data.reduce((acc, category) => {
+      acc.push(category);
+      acc.push(...category.children);
+      return acc;
+    }, []);
 
-  const allCategories = data.reduce((acc, category) => {
-    acc.push(category);
-    acc.push(...category.children);
-    return acc;
+    return allCategories;
   }
-  , []);
-
-  return allCategories;
-}
+);
 
 /**
  *
