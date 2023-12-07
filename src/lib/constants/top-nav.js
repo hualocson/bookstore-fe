@@ -4,10 +4,6 @@ const topNavigation = [
     label: "home",
   },
   {
-    href: "/contact",
-    label: "contact",
-  },
-  {
     href: "/about",
     label: "about",
   },
