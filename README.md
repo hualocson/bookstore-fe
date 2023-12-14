@@ -36,3 +36,25 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+----
+## Testing
+1. Write test code in `/cypress/e2e/visit/landing-page` (test lading page: **/,  /about**)
+2. Write test code in `/cypress/e2e/visit/other-page` (test other page)
+
+3. Example File name `home.cy.js`
+
+4. Run test:
+```bash
+npx cypress open
+```
+
+4. Select E2E Testing
+![Test Image 1](./resources/testing-1.png)
+
+4. Click Start E2E Testing
+![Test Image 2](./resources/testing-2.png)
+
+4. Click file to run test (ex: about.cy.js)
+![Test Image 3](./resources/testing-3.png)

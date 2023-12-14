@@ -11,10 +11,17 @@ const MemberCard = ({ name, role, desc }) => {
       </CardBody>
       <CardFooter className="flex-col gap-4 bg-primary-500 text-xl text-grayscale">
         <div className="flex w-full flex-col items-center">
-          <p className="font-bold">{name}</p>
-          <p className="text-lg">{desc}</p>
+          <p id="card-name" className="font-bold">
+            {name}
+          </p>
+          <p id="card-desc" className="text-lg">
+            {desc}
+          </p>
         </div>
-        <p className="rounded-lg bg-grayscale-100/20 p-2 text-lg backdrop-blur-lg">
+        <p
+          id="card-role"
+          className="rounded-lg bg-grayscale-100/20 p-2 text-lg backdrop-blur-lg"
+        >
           {role}
         </p>
       </CardFooter>
