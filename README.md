@@ -50,11 +50,14 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 npx cypress open
 ```
 
-4. Select E2E Testing
+5. Select E2E Testing
+   
 ![Test Image 1](./resources/testing-1.png)
 
-4. Click Start E2E Testing
+6. Click Start E2E Testing
+   
 ![Test Image 2](./resources/testing-2.png)
 
-4. Click file to run test (ex: about.cy.js)
+7. Click file to run test (ex: about.cy.js)
+   
 ![Test Image 3](./resources/testing-3.png)
