@@ -14,7 +14,7 @@ const RelateProductsListing = ({ products }) => {
   return (
     <div className="flex w-full flex-col gap-6 border-t border-grayscale-300 py-4">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold"> Related books </h2>
+        <h2 className="text-2xl font-bold"> You may like </h2>
         {products.length > 4 && (
           <Button
             color="primary"

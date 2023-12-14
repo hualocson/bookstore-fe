@@ -1,6 +1,9 @@
 import { useEffect } from "react";
 
+import { useRouter } from "next/router";
+
 import fetcher from "@/apis/configs";
+import { handleErrorResponse } from "@/lib/utils";
 import useSWR from "swr";
 
 import { setUser } from "@/store/features/user";
@@ -8,6 +11,7 @@ import { setLoading } from "@/store/features/user/user-slice";
 import { useDispatch } from "@/store/redux-hook";
 
 const useUser = () => {
+  const router = useRouter();
   const { data, error, isLoading, mutate } = useSWR(
     "/customers",
     fetcher().get
@@ -23,6 +27,10 @@ const useUser = () => {
   useEffect(() => {
     if (error) {
       dispatch(setLoading(false));
+      const { statusCode } = handleErrorResponse(error);
+
+      if (statusCode == 401) {
+      }
     } else dispatch(setLoading(isLoading));
   }, [dispatch, isLoading, error]);
 

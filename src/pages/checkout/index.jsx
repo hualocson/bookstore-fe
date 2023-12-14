@@ -183,14 +183,15 @@ const CheckoutPage = () => {
             }
           />
 
-          <div className="flex gap-x-4">
+          <div className="flex gap-x-4 items-center">
+          <h2>Choose payment method:</h2>
             <Button
               className="uppercase"
               variant="shadow"
               color="primary"
               onPress={notifyCheckout}
             >
-              Complete purchase
+              Cash on delivery
             </Button>
             <PayPalCheckout
               onCreateOrder={handleCreatePalPalOrder}
