@@ -60,10 +60,13 @@ const VerifyForm = () => {
               priority
             />
           </Link>
-          <h1 className="text-3xl font-bold">Check you email</h1>
+          <h1 id="verify-title" className="text-3xl font-bold">
+            Check your email
+          </h1>
         </div>
         <div className="flex flex-col items-center gap-4 rounded-xl bg-grayscale-500/20 p-10">
           <Input
+            id="verify-token"
             value={token}
             onValueChange={setToken}
             isClearable
@@ -88,6 +91,7 @@ const VerifyForm = () => {
             className="w-full"
             variant="solid"
             color="primary"
+            id="verify-button"
             onPress={notify}
           >
             Submit

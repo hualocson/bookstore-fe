@@ -42,7 +42,7 @@ const SignUpForm = () => {
     toast.promise(handleOnLogin(), {
       loading: "Waiting send token...",
       success: (message) => message,
-      error: (err) => err.message,
+      error: (err) => <span id="signup-error">{err.message}</span>,
     });
   };
 
@@ -60,7 +60,9 @@ const SignUpForm = () => {
               priority
             />
           </Link>
-          <h1 className="text-3xl font-bold">Join now!</h1>
+          <h1 id="signup-title" className="text-3xl font-bold">
+            Join now!
+          </h1>
         </div>
 
         {/* Form */}
@@ -96,6 +98,7 @@ const SignUpForm = () => {
               onValueChange={setEmail}
               type="email"
               label="Email"
+              id="signup-email"
               isClearable
               isRequired
               radius="xl"
@@ -121,6 +124,7 @@ const SignUpForm = () => {
               color="primary"
               isDisabled={loading}
               onPress={notify}
+              id="signup-button"
             >
               Sign Up with email
             </Button>
