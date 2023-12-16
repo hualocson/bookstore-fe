@@ -15,6 +15,7 @@ import { setUserEmail } from "@/store/features/user/user-slice";
 import { useDispatch } from "@/store/redux-hook";
 
 import logo from "@/resources/images/landing/books-logo.svg";
+import { handleErrorResponse } from "@/lib/utils";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
@@ -41,7 +42,7 @@ const LoginForm = () => {
     toast.promise(handleOnLogin(), {
       loading: "Waiting send token...",
       success: (message) => message,
-      error: (err) => err.message,
+      error: (err) => <span id="toast-error">{err.message}</span>,
     });
   };
 
@@ -59,7 +60,9 @@ const LoginForm = () => {
               priority
             />
           </Link>
-          <h1 className="text-3xl font-bold">Welcome back!</h1>
+          <h1 id="login-title" className="text-3xl font-bold">
+            Welcome back!
+          </h1>
         </div>
 
         {/* Form */}
@@ -91,6 +94,7 @@ const LoginForm = () => {
           <span>--- or ---</span>
           <div className="flex w-full flex-col gap-y-4">
             <Input
+              id="login-email"
               value={email}
               onValueChange={setEmail}
               type="email"
@@ -120,6 +124,7 @@ const LoginForm = () => {
               color="primary"
               isDisabled={loading}
               onPress={notify}
+              id="login-button"
             >
               Log In with email
             </Button>

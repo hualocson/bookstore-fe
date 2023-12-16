@@ -5,5 +5,8 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: "http://localhost:3000",
   },
+  env: {
+    beUrl: "http://localhost:3000",
+  },
   watchForFileChanges: false,
 });
